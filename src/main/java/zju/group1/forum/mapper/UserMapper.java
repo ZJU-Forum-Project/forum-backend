@@ -4,7 +4,6 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-import org.apache.ibatis.annotations.Select;
 import zju.group1.forum.dto.User;
 
 @Mapper
@@ -18,6 +17,7 @@ public interface UserMapper {
 
     @Update("update Forum set password = #{password} where email = #{email} ")
     void updatePassword(String email, String password);
+
     @Select("select count(*) from user where name=#{name}")
     int isUserExist(User user);
 }

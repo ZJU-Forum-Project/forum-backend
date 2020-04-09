@@ -19,13 +19,13 @@ public class ModifyController {
     @PostMapping(value = "/modify")
     public Message modify(@RequestParam("password") String password,
                    @RequestParam("email") String email,
-                   @RequestParam("string") String string,
+                   @RequestParam("token") String token,
                    HttpServletRequest request) throws IOException{
 
         Message message = new Message();
 
         HttpSession session = request.getSession();
-        if (session.getAttribute(email) != string) {
+        if (!session.getAttribute(email).equals(token)) {
             message.setState(false);
             message.setMessage("您输入的验证码有误");
             return message;

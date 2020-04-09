@@ -31,12 +31,10 @@ public class AuthorizeController {
     private UserMapper userMapper;
 
     @GetMapping(value = "/githubLogin")
-    public Message callback(@RequestParam("urlParam") String urlParam,
+    public Message callback(@RequestParam("code") String code,
+                            @RequestParam("state") String state,
                             HttpServletRequest request) throws IOException {
         Message message = new Message();
-
-        String code = urlParam.split("&")[0].split("=")[1];
-        String state = urlParam.split("&")[1].split("=")[1];
 
         AccessToken accessTokenDTO = new AccessToken();
         accessTokenDTO.setCode(code);
@@ -68,7 +66,10 @@ public class AuthorizeController {
 
         Message message = new Message();
         String pwd = userMapper.verifyUser(email);
-        if(pwd == null || pwd != password){
+
+        System.out.println(pwd);
+        System.out.println(password);
+        if(pwd == null || !pwd.equals(password)){
             message.setState(false);
             message.setMessage("邮箱或密码错误");
         }
