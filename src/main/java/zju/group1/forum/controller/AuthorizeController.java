@@ -30,7 +30,7 @@ public class AuthorizeController {
     @Autowired
     private UserMapper userMapper;
 
-    @GetMapping(value = "/githubLogin")
+    @PostMapping(value = "/githubLogin")
     public Message callback(@RequestParam("code") String code,
                             @RequestParam("state") String state,
                             HttpServletRequest request) throws IOException {
@@ -52,16 +52,14 @@ public class AuthorizeController {
             message.setMessage("登陆成功");
             message.setState(true);
             User user = githubProvider.getUser(accessToken);
-            String token = UUID.randomUUID().toString();
-            user.setToken(token);
-            request.getSession().setAttribute("user", user);
             System.out.println(user);
+            userMapper.createUser(user);
         }
         return message;
     }
 
     @PostMapping(value = "/login")
-    public Message callback(@RequestParam("email") String email,
+    public Message email_login(@RequestParam("email") String email,
                             @RequestParam("password") String password) throws IOException{
 
         Message message = new Message();
