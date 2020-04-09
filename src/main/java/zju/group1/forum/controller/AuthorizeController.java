@@ -3,7 +3,7 @@ package zju.group1.forum.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import zju.group1.forum.dto.AccessToken;
-import zju.group1.forum.dto.GithubUser;
+import zju.group1.forum.dto.User;
 import zju.group1.forum.mapper.UserMapper;
 import zju.group1.forum.provider.GithubProvider;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +29,7 @@ public class AuthorizeController {
     private UserMapper userMapper;
 
     @GetMapping(value = "/toLogin")
-    public GithubUser callback(@RequestParam("urlParam") String urlParam) throws IOException {
+    public User callback(@RequestParam("urlParam") String urlParam) throws IOException {
         String code = urlParam.split("&")[0].split("=")[1];
         String state = urlParam.split("&")[1].split("=")[1];
 
@@ -41,13 +41,13 @@ public class AuthorizeController {
         accessTokenDTO.setRedirect_uri(RedirectURI);
 
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
-        GithubUser githubUser = githubProvider.getUser(accessToken);
+        User user = githubProvider.getUser(accessToken);
         String token = UUID.randomUUID().toString();
-        githubUser.setToken(token);
-        githubUser.setGmtCreate(String.valueOf(System.currentTimeMillis()));
-        githubUser.setGmtModified(githubUser.getGmtCreate());
-        System.out.println(githubUser);
-        userMapper.createUser(githubUser);
-        return githubUser;
+        user.setToken(token);
+        user.setGmtCreate(String.valueOf(System.currentTimeMillis()));
+        user.setGmtModified(user.getGmtCreate());
+        System.out.println(user);
+        userMapper.createUser(user);
+        return user;
     }
 }
