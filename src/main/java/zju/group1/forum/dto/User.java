@@ -10,7 +10,7 @@ public class User {
     @Email(message = "邮箱格式错误")
     private String email;
     @NotBlank(message = "账号不能为空")
-    private String account;
+    private String name;
     @NotBlank(message = "密码不能为空")
     private String password;
     private String avatarUrl;

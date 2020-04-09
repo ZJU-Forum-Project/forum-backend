@@ -7,8 +7,7 @@ import zju.group1.forum.dto.User;
 @Mapper
 public interface UserMapper {
 
-    @Insert("insert into user (login,id,bio,avatarUrl,token,gmtCreate,gmtModified) values (#{login},#{id},#{bio},#{avatar_url},#{token},#{gmtCreate},#{gmtModified}) " +
-            "on DUPLICATE KEY UPDATE gmtModified=#{gmtModified},token=#{token}")
+    @Insert("insert into user (email,name,account,password) values (#{email},#{name},#{account},#{password}")
     void createUser(User user);
 
 }
