@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class Message {
-    boolean state;
-    String message;
+    private boolean state;
+    private String message;
 }
