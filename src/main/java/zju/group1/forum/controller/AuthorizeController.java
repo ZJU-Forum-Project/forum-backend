@@ -3,11 +3,13 @@ package zju.group1.forum.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import zju.group1.forum.dto.AccessToken;
+import zju.group1.forum.dto.Message;
 import zju.group1.forum.dto.User;
 import zju.group1.forum.mapper.UserMapper;
 import zju.group1.forum.provider.GithubProvider;
 import org.springframework.beans.factory.annotation.Value;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -28,10 +30,11 @@ public class AuthorizeController {
     @Autowired
     private UserMapper userMapper;
 
-    @GetMapping(value = "/toLogin")
-    public User callback(@RequestParam("urlParam") String urlParam) throws IOException {
-        String code = urlParam.split("&")[0].split("=")[1];
-        String state = urlParam.split("&")[1].split("=")[1];
+    @GetMapping(value = "/githubLogin")
+    public Message callback(@RequestParam("code") String code,
+                            @RequestParam("state") String state,
+                            HttpServletRequest request) throws IOException {
+        Message message = new Message();
 
         AccessToken accessTokenDTO = new AccessToken();
         accessTokenDTO.setCode(code);
@@ -41,13 +44,40 @@ public class AuthorizeController {
         accessTokenDTO.setRedirect_uri(RedirectURI);
 
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
-        User user = githubProvider.getUser(accessToken);
-        String token = UUID.randomUUID().toString();
-        user.setToken(token);
-//        user.setGmtCreate(String.valueOf(System.currentTimeMillis()));
-//        user.setGmtModified(user.getGmtCreate());
-        System.out.println(user);
-        userMapper.createUser(user);
-        return user;
+        if(accessToken == null){
+            message.setState(false);
+            message.setMessage("登陆失败");
+        }
+        else{
+            message.setMessage("登陆成功");
+            message.setState(true);
+            User user = githubProvider.getUser(accessToken);
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
+            request.getSession().setAttribute("user", user);
+            System.out.println(user);
+        }
+        return message;
+    }
+
+    @PostMapping(value = "/login")
+    public Message callback(@RequestParam("email") String email,
+                            @RequestParam("password") String password) throws IOException{
+
+        Message message = new Message();
+        String pwd = userMapper.verifyUser(email);
+
+        System.out.println(pwd);
+        System.out.println(password);
+        if(pwd == null || !pwd.equals(password)){
+            message.setState(false);
+            message.setMessage("邮箱或密码错误");
+        }
+        else{
+            message.setState(true);
+            message.setMessage("登陆成功！");
+        }
+
+        return message;
     }
 }
