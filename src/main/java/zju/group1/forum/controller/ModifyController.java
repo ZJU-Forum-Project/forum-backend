@@ -18,9 +18,9 @@ public class ModifyController {
 
     @PostMapping(value = "/modify")
     public Message modify(@RequestParam("password") String password,
-                   @RequestParam("email") String email,
-                   @RequestParam("token") String token,
-                   HttpServletRequest request) throws IOException{
+                          @RequestParam("email") String email,
+                          @RequestParam("token") String token,
+                          HttpServletRequest request) throws IOException {
 
         Message message = new Message();
 

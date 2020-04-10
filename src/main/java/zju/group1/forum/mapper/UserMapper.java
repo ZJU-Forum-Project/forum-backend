@@ -9,7 +9,7 @@ import zju.group1.forum.dto.User;
 @Mapper
 public interface UserMapper {
 
-    @Insert("insert into user (email,name,account,password) values (#{email},#{name},#{account},#{password}")
+    @Insert("insert into user (email,name,password,avatarUrl) values (#{email},#{name},#{password},#{avatarUrl})")
     void createUser(User user);
 
     @Select("select password from user where email = #{email}")

@@ -22,7 +22,7 @@ public class MailService {
         simpleMailMessage.setFrom(username);
         simpleMailMessage.setTo(toEmail);
         simpleMailMessage.setSubject("Forum注册验证");
-        simpleMailMessage.setText("您的验证码是:" + token + "\n验证码5min内有效");
+        simpleMailMessage.setText("您的验证码是:" + token + "\n验证码30min内有效");
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
         mailSender.setHost(host);

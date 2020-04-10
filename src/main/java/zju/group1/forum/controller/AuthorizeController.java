@@ -32,8 +32,7 @@ public class AuthorizeController {
 
     @PostMapping(value = "/githubLogin")
     public Message callback(@RequestParam("code") String code,
-                            @RequestParam("state") String state,
-                            HttpServletRequest request) throws IOException {
+                            @RequestParam("state") String state) throws IOException {
         Message message = new Message();
 
         AccessToken accessTokenDTO = new AccessToken();
@@ -44,34 +43,43 @@ public class AuthorizeController {
         accessTokenDTO.setRedirect_uri(RedirectURI);
 
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
-        if(accessToken == null){
+        if (accessToken == null) {
             message.setState(false);
             message.setMessage("登陆失败");
-        }
-        else{
-            message.setMessage("登陆成功");
-            message.setState(true);
+        } else {
             User user = githubProvider.getUser(accessToken);
-            System.out.println(user);
-            userMapper.createUser(user);
+            if(user.getName() == null){
+                message.setState(false);
+                message.setMessage("github上的用户名为空");
+                return message;
+            }
+            if (user.getEmail() == null) {
+                message.setState(false);
+                message.setMessage("github上的邮箱为空");
+                return message;
+            }
+            if (userMapper.isUserExist(user) == 0) {
+                userMapper.createUser(user);
+            }
+            message.setState(true);
+            message.setMessage(user.getName() + ";" + user.getAvatarUrl());
         }
         return message;
     }
 
     @PostMapping(value = "/login")
     public Message email_login(@RequestParam("email") String email,
-                            @RequestParam("password") String password) throws IOException{
+                               @RequestParam("password") String password) throws IOException {
 
         Message message = new Message();
         String pwd = userMapper.verifyUser(email);
 
         System.out.println(pwd);
         System.out.println(password);
-        if(pwd == null || !pwd.equals(password)){
+        if (pwd == null || !pwd.equals(password)) {
             message.setState(false);
             message.setMessage("邮箱或密码错误");
-        }
-        else{
+        } else {
             message.setState(true);
             message.setMessage("登陆成功！");
         }

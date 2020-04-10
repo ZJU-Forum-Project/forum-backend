@@ -1,0 +1,14 @@
+version: '3'
+services:
+  # 服务名称
+  java:
+    # 镜像:版本
+    image: java:8
+    container_name: backend
+    # 映射容器8080端口到本地8080端口
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/usr/share
+    # 覆盖容器启动后默认执行的命令。
+    command: /bin/bash -c "java -jar /usr/share/demo-0.0.1-SNAPSHOT.jar"

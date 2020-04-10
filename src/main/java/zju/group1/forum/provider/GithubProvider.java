@@ -11,6 +11,7 @@ import java.io.IOException;
 @Component
 public class GithubProvider {
     public String getAccessToken(AccessToken accessToken) {
+
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(mediaType, JSON.toJSONString(accessToken));
@@ -35,7 +36,9 @@ public class GithubProvider {
                 .build();
         Response response = client.newCall(request).execute();
         String string = response.body().string();
+        System.out.println(string);
         User user = JSON.parseObject(string, User.class);
+        System.out.println(user);
         return user;
     }
 }
