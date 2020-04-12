@@ -1,5 +1,7 @@
 package zju.group1.forum.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,11 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+@Api(tags = "修改密码")
 @RestController
 public class ModifyController {
     @Autowired
     private UserMapper userMapper;
 
+    @ApiOperation("修改密码")
     @PostMapping(value = "/modify")
     public Message modify(@RequestParam("password") String password,
                           @RequestParam("email") String email,

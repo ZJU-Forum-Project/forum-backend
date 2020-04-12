@@ -1,5 +1,7 @@
 package zju.group1.forum.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -15,6 +17,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.UUID;
 
+@Api(tags = "注册")
 @RestController
 public class RegisterController {
     @Autowired
@@ -23,6 +26,7 @@ public class RegisterController {
     @Autowired
     private MailService mailService;
 
+    @ApiOperation("用户注册")
     @PostMapping(value = "/register")
     public Message register(@Valid User user,
                             BindingResult bindingResult,
@@ -59,6 +63,7 @@ public class RegisterController {
         return message;
     }
 
+    @ApiOperation("发送邮件认证")
     @PostMapping(value = "/applyEmail")
     public Message register(@RequestParam("email") String email,
                             HttpServletRequest request) throws IOException {

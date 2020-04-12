@@ -1,5 +1,7 @@
 package zju.group1.forum.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import zju.group1.forum.dto.AccessToken;
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.UUID;
 
+@Api(tags = "登录")
 @RestController
 public class AuthorizeController {
     @Autowired
@@ -30,6 +33,7 @@ public class AuthorizeController {
     @Autowired
     private UserMapper userMapper;
 
+    @ApiOperation("Github登录")
     @PostMapping(value = "/githubLogin")
     public Message callback(@RequestParam("code") String code,
                             @RequestParam("state") String state) throws IOException {
@@ -66,7 +70,7 @@ public class AuthorizeController {
         }
         return message;
     }
-
+    @ApiOperation("普通登录")
     @PostMapping(value = "/login")
     public Message email_login(@RequestParam("email") String email,
                                @RequestParam("password") String password) throws IOException {
