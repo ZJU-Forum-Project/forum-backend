@@ -5,6 +5,7 @@ script:
   - git pull origin development
   - mvn clean install
 after_script:
-  - mv -f target/demo-0.0.1-SNAPSHOT.jar/root/back-end/
+  - mv -f target/demo-0.0.1-SNAPSHOT.jar /root/back-end/
   - cd /root/back-end
+  - chmod +x docker-compose.yml
   - docker-compose up
