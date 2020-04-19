@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import zju.group1.forum.dto.Message;
+import zju.group1.forum.interceptor.AuthToken;
 import zju.group1.forum.mapper.UserMapper;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,8 +20,10 @@ public class ModifyController {
     @Autowired
     private UserMapper userMapper;
 
+
     @ApiOperation("修改密码")
     @PostMapping(value = "/modify")
+    @AuthToken
     public Message modify(@RequestParam("password") String password,
                           @RequestParam("email") String email,
                           @RequestParam("token") String token,
@@ -29,9 +32,10 @@ public class ModifyController {
         Message message = new Message();
 
         HttpSession session = request.getSession();
-        if (!session.getAttribute(email).equals(token)) {
+        Object emailSession = session.getAttribute(email);
+        if (emailSession == null || !emailSession.equals(token)) {
             message.setState(false);
-            message.setMessage("您输入的验证码有误");
+            message.setMessage("您输入的验证码有误或为空");
             return message;
         }
 
