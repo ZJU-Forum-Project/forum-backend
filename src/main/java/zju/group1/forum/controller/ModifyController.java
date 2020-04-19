@@ -35,7 +35,7 @@ public class ModifyController {
         Object emailSession = session.getAttribute(email);
         if (emailSession == null || !emailSession.equals(token)) {
             message.setState(false);
-            message.setMessage("您输入的验证码有误或为空");
+            message.setMessage("输入的验证码有误或为空");
             return message;
         }
 
