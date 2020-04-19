@@ -1,0 +1,10 @@
+language: java
+sudo: required
+script:
+  - cd /root/back-end-development
+  - git pull origin development
+  - mvn clean install
+after_script:
+  - mv -f target/demo-0.0.1-SNAPSHOT.jar/root/back-end/
+  - cd /root/back-end
+  - docker-compose up
