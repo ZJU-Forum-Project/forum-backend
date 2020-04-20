@@ -7,11 +7,10 @@ before_install:
     -in id_rsa.enc -out ~/.ssh/id_rsa -d
   - chmod 600 ~/.ssh/id_rsa
 script:
-#  - mvn clean install
-  - scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no target/demo-0.0.1-SNAPSHOT.jar root@106.12.27.104:/root/back-end/
+  - ssh root@106.12.27.104 -o StrictHostKeyChecking=no 'rm -rf forum-backend/ && git clone git@github.com:ZJU-Forum-Project/forum-backend.git && cd /root/forum-backend && mvn clean install'
+#  - scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no target/demo-0.0.1-SNAPSHOT.jar root@106.12.27.104:/root/back-end/
 
 #after_script:
-#  - ssh root@106.12.27.104 -o StrictHostKeyChecking=no 'rm -rf forum-backend/ && cd /root/forum-backend && mvn clean install'
 #  - mv -f target/demo-0.0.1-SNAPSHOT.jar /root/back-end/
 #  - cd /root/back-end
 #  - docker-compose up
