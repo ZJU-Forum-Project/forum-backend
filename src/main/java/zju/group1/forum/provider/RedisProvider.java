@@ -36,7 +36,6 @@ public class RedisProvider {
         pool.close();
         return username;
     }
-
     public void setAuthorizeToken(String authorizeToken, String email) {
         JedisPool pool = getRedisPool();
         Jedis jedis = pool.getResource();
