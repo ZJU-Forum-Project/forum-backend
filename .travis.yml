@@ -1,5 +1,9 @@
 language: java
+addons:
+ssh_known_hosts:
+  - 106.12.27.104
 script:
+  - ssh root@106.12.27.104
   - cd /root/back-end-development
   - git pull origin development
   - mvn clean install
@@ -7,3 +11,8 @@ after_script:
   - mv -f target/demo-0.0.1-SNAPSHOT.jar /root/back-end/
   - cd /root/back-end
   - docker-compose up
+before_install:
+  - openssl aes-256-cbc -K $encrypted_9b2d7e19d83c_key -iv $encrypted_9b2d7e19d83c_iv
+    -in id_rsa.enc -out ~\/.ssh/id_rsa -d
+  - chmod 600 ~/.ssh/id_rsa
+  - ssh root@106.12.27.104 -o StrictHostKeyChecking=no
