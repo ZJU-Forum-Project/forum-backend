@@ -3,7 +3,6 @@ addons:
 ssh_known_hosts:
   - 106.12.27.104
 script:
-  - ssh root@106.12.27.104
   - cd /root/back-end-development
   - git pull origin development
   - mvn clean install
