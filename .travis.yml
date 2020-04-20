@@ -3,8 +3,6 @@ addons:
 ssh_known_hosts:
   - 106.12.27.104
 script:
-  - rm -rf forum-backend/
-  - git clone git@github.com:ZJU-Forum-Project/forum-backend.git
   - cd /root/forum-backend
   - mvn clean install
 after_script:
@@ -16,3 +14,5 @@ before_install:
     -in id_rsa.enc -out ~/.ssh/id_rsa -d
   - chmod 600 ~/.ssh/id_rsa
   - ssh root@106.12.27.104 -o StrictHostKeyChecking=no
+  - rm -rf forum-backend/
+  - git clone git@github.com:ZJU-Forum-Project/forum-backend.git
