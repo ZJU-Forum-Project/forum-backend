@@ -24,7 +24,7 @@ import java.util.List;
 @RestController
 public class PeresonalReplyController {
     @Resource
-    private RepliesMapper repliesMapper;
+    private ReplyMapper replyMapper;
     @Resource
     private UserMapper userMapper;
     @Autowired
@@ -49,7 +49,7 @@ public class PeresonalReplyController {
             return message;
         }
         String name = userMapper.searchName(email);
-        List<Reply> ReplyList = ReplyMapper.CheckReply(name);
+        List<Reply> ReplyList = replyMapper.CheckReply(name);
         message.setReplies(ReplyList);
         message.setMessage("获取个人所有回复信息成功");
         return message;
@@ -63,7 +63,7 @@ public class PeresonalReplyController {
 
         /*Reply reply = ReplyMapper.getReplyByID(id);
        reply.setState(true); 这两行也许不需要?*/
-        ReplyMapper.SeenReply(id);
+        replyMapper.SeenReply(id);
         message.setreplyState(true);
         message.setstate(true);
         message.setMessage("修改状态成功");
@@ -88,7 +88,7 @@ public class PeresonalReplyController {
             return message;
         }
         String name = userMapper.searchName(email);
-       int num1 = ReplyMapper.getUnreadReplyNumber(name);
+       int num1 = replyMapper.getUnreadReplyNumber(name);
         message.setNum(num1);
         message.setMessage("获取未阅读回复数量成功");
         return message;
