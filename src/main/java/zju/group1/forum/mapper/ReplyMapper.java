@@ -28,13 +28,13 @@ public interface ReplyMapper {
     @Delete("delete from post_reply where id = #{floorId}")
     void deleteReply(int floorId);
 
-    @Select("select * from post_reply where replyid=(select id from post_reply where author = #{name})")
+    @Select("select * from post_reply where replyid in (select id from post_reply where author = #{name})")
     List<Reply> CheckReply(String name);
 
     @Update("update post_reply set replyState=true where id = #{id}")
     void seenReply(Reply newReply);
     
-    @Select("select count(state='false') from post_reply where replyid=(select id from post_reply where author = #{name})")
+    @Select("select count(replyState='false') from post_reply where replyid in (select id from post_reply where author = #{name})")
     int getUnreadReplyNumber(String name);
 
 }
