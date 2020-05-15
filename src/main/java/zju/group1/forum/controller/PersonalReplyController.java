@@ -26,8 +26,13 @@ import java.util.List;
 public class PersonalReplyController {
     @Resource
     private ReplyMapper replyMapper;
+
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private PostingsMapper postingsMapper;
+
     @Autowired
     private RedisProvider redisProvider;
 
@@ -35,7 +40,7 @@ public class PersonalReplyController {
     @PostMapping(value = "/CheckReply")
     @AuthToken
     public PersonalMessage CheckReply(@RequestParam("Authorization") String token) throws IOException {
-         PersonalMessage message = new PersonalMessage();
+        PersonalMessage message = new PersonalMessage();
         if (token == null) {
             message.setState(false);
             message.setMessage("请重新登录");
@@ -51,6 +56,9 @@ public class PersonalReplyController {
         }
         String name = userMapper.searchName(email);
         List<Reply> ReplyList = replyMapper.CheckReply(name);
+        for (int i = 0; i < ReplyList.size(); i++) {
+            ReplyList.get(i).setPostName(postingsMapper.getPostingNameByID(ReplyList.get(i).getPostId()));
+        }
         message.setReplies(ReplyList);
         message.setState(true);
         message.setMessage("获取个人所有回复信息成功");
@@ -68,11 +76,12 @@ public class PersonalReplyController {
         message.setMessage("修改状态成功");
         return message;
     }
+
     @ApiOperation("获得未阅读回复数量")
     @PostMapping(value = "/getUnreadReplyNumber")
     @AuthToken
     public PersonalMessage getUnreadReplyNumber(@RequestParam("Authorization") String token) throws IOException {
-         PersonalMessage message = new PersonalMessage();
+        PersonalMessage message = new PersonalMessage();
         if (token == null) {
             message.setState(false);
             message.setMessage("请重新登录");
@@ -87,7 +96,7 @@ public class PersonalReplyController {
             return message;
         }
         String name = userMapper.searchName(email);
-       int num1 = replyMapper.getUnreadReplyNumber(name);
+        int num1 = replyMapper.getUnreadReplyNumber(name);
         message.setState(true);
         message.setNum(num1);
         message.setMessage("获取未阅读回复数量成功");
