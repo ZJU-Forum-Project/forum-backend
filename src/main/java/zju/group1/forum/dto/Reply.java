@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class Reply {
+    private int id;
     private int postId;//关联帖子数据库
     private String postName;
     private String author;//关联用户数据库外键
