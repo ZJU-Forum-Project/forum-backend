@@ -6,8 +6,5 @@ before_install:
     -in id_rsa.enc -out ~/.ssh/id_rsa -d
   - chmod 600 ~/.ssh/id_rsa
 script:
-<<<<<<< HEAD
   - ssh root@106.12.27.104 -o StrictHostKeyChecking=no 'cd /root/forum-backend && git remote update origin --prune && mvn clean install && mv -f target/demo-0.0.1-SNAPSHOT.jar /root/back-end/ && cd /root/back-end && docker-compose stop && docker-compose up -d'
-=======
   - ssh root@106.12.27.104 -o StrictHostKeyChecking=no 'cd /root/forum-backend && git pull && mvn clean && mvn install && mv -f /root/forum-backend/target/demo-0.0.1-SNAPSHOT.jar /root/back-end/ && cd /root/back-end && docker-compose stop && docker-compose up -d'
->>>>>>> first commit
