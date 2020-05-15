@@ -1,4 +1,4 @@
-package main.java.zju.group1.forum.dto;
+package zju.group1.forum.dto;
 
 import lombok.Data;
 

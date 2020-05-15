@@ -2,9 +2,10 @@ package zju.group1.forum.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import zju.group1.forum.dto.Message;
 import zju.group1.forum.dto.PersonalMessage;
 import zju.group1.forum.dto.ReplyMessage;
-import zju.group1.forum.mapper.RepliesMapper;
+import zju.group1.forum.mapper.ReplyMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,7 @@ import java.util.List;
 
 @Api(tags = "查看回复")
 @RestController
-public class PeresonalReplyController {
+public class PersonalReplyController {
     @Resource
     private ReplyMapper replyMapper;
     @Resource
@@ -51,6 +52,7 @@ public class PeresonalReplyController {
         String name = userMapper.searchName(email);
         List<Reply> ReplyList = replyMapper.CheckReply(name);
         message.setReplies(ReplyList);
+        message.setState(true);
         message.setMessage("获取个人所有回复信息成功");
         return message;
     }
@@ -58,14 +60,11 @@ public class PeresonalReplyController {
     @ApiOperation("修改未读状态")
     @PostMapping(value = "/seenReply")
     @AuthToken
-    public ReplyMessage SeenReply(@PathVariable("id") String id) {
-        ReplyMessage message = new Message();
+    public Message SeenReply(@RequestParam("id") int id) {
+        Message message = new Message();
 
-        /*Reply reply = ReplyMapper.getReplyByID(id);
-       reply.setState(true); 这两行也许不需要?*/
-        replyMapper.SeenReply(id);
-        message.setreplyState(true);
-        message.setstate(true);
+        replyMapper.seenReply(id);
+        message.setState(true);
         message.setMessage("修改状态成功");
         return message;
     }
@@ -89,6 +88,7 @@ public class PeresonalReplyController {
         }
         String name = userMapper.searchName(email);
        int num1 = replyMapper.getUnreadReplyNumber(name);
+        message.setState(true);
         message.setNum(num1);
         message.setMessage("获取未阅读回复数量成功");
         return message;

@@ -24,7 +24,7 @@ public class ReplyMessage {
 
     public void setReplyInfo(Reply reply){
         setAuthor(reply.getAuthor());
-        setreplyState(reply.getreplyState());
+        setReplyState(reply.getReplyState());
         setTime(reply.getReplyTime());
         setContent(reply.getContent());
         setFloorId(reply.getId());
