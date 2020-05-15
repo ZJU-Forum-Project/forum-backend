@@ -18,11 +18,8 @@ target/
 *.iws
 *.iml
 *.ipr
-<<<<<<< HEAD
-
-=======
 *.log
->>>>>>> first commit
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
