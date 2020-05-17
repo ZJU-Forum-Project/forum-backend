@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import zju.group1.forum.dto.AccessToken;
+import zju.group1.forum.dto.Encryption;
 import zju.group1.forum.dto.Message;
 import zju.group1.forum.dto.User;
 import zju.group1.forum.mapper.UserMapper;
@@ -15,6 +16,7 @@ import zju.group1.forum.service.EncryptService;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 @Api(tags = "登录")
 @RestController
@@ -73,6 +75,7 @@ public class AuthorizeController {
                 userMapper.createUser(user);
             }
 
+
             String authorizeToken = encryptService.getMD5Code(user.getEmail());
             redisProvider.setAuthorizeToken(authorizeToken, user.getEmail());
             message.setState(true);
@@ -85,12 +88,14 @@ public class AuthorizeController {
     @ApiOperation("普通登录")
     @PostMapping(value = "/login")
     public Message email_login(@RequestParam("email") String email,
-                               @RequestParam("password") String password) throws IOException {
+                               @RequestParam("password") String password) throws  NoSuchAlgorithmException {
 
         Message message = new Message();
         String pwd = userMapper.verifyUser(email);
+        Encryption encryption=new Encryption();
+        String cipherText=encryption.encrypt(password);
 
-        if (pwd == null || !pwd.equals(password)) {
+        if (pwd == null || !pwd.equals(cipherText)) {
             message.setState(false);
             message.setMessage("邮箱或密码错误");
         } else {
