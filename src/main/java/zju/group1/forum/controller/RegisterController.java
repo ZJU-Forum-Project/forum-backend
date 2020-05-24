@@ -8,6 +8,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import zju.group1.forum.dto.Message;
 import zju.group1.forum.dto.User;
+import zju.group1.forum.dto.Encryption;
 import zju.group1.forum.mapper.UserMapper;
 import zju.group1.forum.provider.RedisProvider;
 import zju.group1.forum.service.EncryptService;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 @Api(tags = "注册")
@@ -39,7 +41,7 @@ public class RegisterController {
     @PostMapping(value = "/register")
     public Message register(@Valid User user,
                             BindingResult bindingResult,
-                            HttpServletRequest request) throws IOException {
+                            HttpServletRequest request) throws NoSuchAlgorithmException {
         Message message = new Message();
         if (bindingResult.hasErrors()) {
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
@@ -65,6 +67,9 @@ public class RegisterController {
             message.setMessage("用户已存在");
             return message;
         }
+        Encryption encryption=new Encryption();
+        String cipherText=encryption.encrypt(user.getPassword());
+        user.setPassword(cipherText);
 
         userMapper.createUser(user);
         message.setState(true);

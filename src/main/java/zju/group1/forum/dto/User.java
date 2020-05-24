@@ -6,6 +6,9 @@ import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 @ApiModel("用户实体-王钟毓")
 @Data
@@ -28,4 +31,6 @@ public class User {
     @ApiModelProperty("邮箱验证码[需先调用发送邮件认证]")
     @NotBlank(message = "验证码不能为空")
     private String token;
+
+
 }
