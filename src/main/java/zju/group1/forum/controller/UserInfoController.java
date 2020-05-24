@@ -86,17 +86,17 @@ public class UserInfoController {
     @AuthToken
     public InfoMessage editinfo(@RequestParam("Authorization") String authorizaToken,
                                 @RequestParam("birth") String birth,
-                                @RequestParam("birth_hidden") Integer birth_hidden,
+                                @RequestParam("birth_hidden") String birth_hidden,
                                 @RequestParam("gender") String gender,
-                                @RequestParam("gender_hidden") Integer gender_hidden,
+                                @RequestParam("gender_hidden") String gender_hidden,
                                 @RequestParam("phone") String phone,
-                                @RequestParam("phone_hidden") Integer phone_hidden,
+                                @RequestParam("phone_hidden") String phone_hidden,
                                 @RequestParam("real_name") String real_name,
-                                @RequestParam("real_name_hidden") Integer real_name_hidden,
+                                @RequestParam("real_name_hidden") String real_name_hidden,
                                 @RequestParam("hometown") String hometown,
-                                @RequestParam("hometown_hidden") Integer hometown_hidden,
+                                @RequestParam("hometown_hidden") String hometown_hidden,
                                 @RequestParam("organization") String organization,
-                                @RequestParam("organization_hidden") Integer organization_hidden,
+                                @RequestParam("organization_hidden") String organization_hidden,
                                 @RequestParam("signature") String signature) throws IOException, ParseException  {
         InfoMessage infoMessage = new InfoMessage();
 
@@ -127,17 +127,17 @@ public class UserInfoController {
         newUserInfo.setEmail(email);
         newUserInfo.setEamil_hidden(1);
         newUserInfo.setBirth(birth1);
-        newUserInfo.setBirth_hidden(birth_hidden);
+        newUserInfo.setBirth_hidden(Integer.parseInt(birth_hidden));
         newUserInfo.setGender(gender);
-        newUserInfo.setGender_hidden(gender_hidden);
+        newUserInfo.setGender_hidden(Integer.parseInt(gender_hidden));
         newUserInfo.setHometown(hometown);
-        newUserInfo.setHometown_hidden(hometown_hidden);
+        newUserInfo.setHometown_hidden(Integer.parseInt(hometown_hidden));
         newUserInfo.setOrganization(organization);
-        newUserInfo.setOrganization_hidden(organization_hidden);
+        newUserInfo.setOrganization_hidden(Integer.parseInt(organization_hidden));
         newUserInfo.setPhone(phone);
-        newUserInfo.setPhone_hidden(phone_hidden);
+        newUserInfo.setPhone_hidden(Integer.parseInt(phone_hidden));
         newUserInfo.setReal_name(real_name);
-        newUserInfo.setReal_name_hidden(real_name_hidden);
+        newUserInfo.setReal_name_hidden(Integer.parseInt(real_name_hidden));
         newUserInfo.setSignature(signature);
 
         userInfoMapper.updateUserInfo(newUserInfo);
