@@ -7,5 +7,5 @@ import java.util.List;
 @Data
 public class PictureMessage {
     private String message;
-    private List<List<String>> replyList;
+    private List<List<String>> pictureList;
 }
