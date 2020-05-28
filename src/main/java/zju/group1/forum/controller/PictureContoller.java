@@ -12,6 +12,7 @@ import zju.group1.forum.mapper.PictureMapper;
 import zju.group1.forum.mapper.PostingsMapper;
 import zju.group1.forum.mapper.ReplyMapper;
 import zju.group1.forum.mapper.UserMapper;
+import zju.group1.forum.provider.RedisProvider;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -30,7 +31,7 @@ import java.util.UUID;
  create table post_picture
 (
 	postId mediumint not null,
-	floorId mediumint not null,
+	floorNum mediumint not null,
 	url varchar(100) not null
 );
  * */
@@ -41,13 +42,21 @@ public class PictureContoller {
     @Resource
     private PictureMapper pictureMapper;
 
+    @Resource
+    private UserMapper userMapper;
+
+    @Autowired
+    private RedisProvider redisProvider;
+
     @Value("${spring.picDir}")
     private String picDir;
 
     @ApiOperation("上传楼层图片")
     @PostMapping(value = "/uploadPicture")
     @AuthToken
-    public Message uploadPicture(@RequestParam("postId") int postId, @RequestParam("floorNumber") int floorNumber, @RequestParam(value = "file") MultipartFile file) throws IOException {
+    public Message uploadPicture(@RequestParam("postId") int postId,
+                                 @RequestParam("floorNumber") int floorNumber,
+                                 @RequestParam(value = "file") MultipartFile file) throws IOException {
         Message message = new Message();
         if (file.isEmpty()) {
             message.setState(false);
@@ -66,20 +75,20 @@ public class PictureContoller {
         return message;
     }
 
-    @ApiOperation("查看楼层图片")
+    @ApiOperation("查看帖子图片")
     @PostMapping(value = "/seePicture")
     @AuthToken
-    public List<List<String>> seePicture(@RequestParam("postId") int postId) throws IOException {
-        List<List<String>> arrayList = new ArrayList<>();
-        List<Picture> pictureByPostID = pictureMapper.getPictureByPostID(postId);
+    public List<Picture> seePicture(@RequestParam("postId") int postId) throws IOException {
+ //       List<List<String>> arrayList = new ArrayList<>();
 
-        int maxFloorN = pictureMapper.getMaxFloorNumberByPostID(postId);
-        for (int i = 0; i <= maxFloorN; i++)
-            arrayList.add(new ArrayList<String>());
-        for (Picture picture : pictureByPostID) {
-            arrayList.get(picture.getFloorId()).add(picture.getUrl());
-        }
-        return arrayList;
+//        int maxFloorN = pictureMapper.getMaxFloorNumberByPostID(postId);
+//        for (int i = 0; i <= maxFloorN; i++) {
+//            arrayList.add(new ArrayList<>());
+//        }
+//        for (Picture picture : pictureByPostID) {
+//            arrayList.get(picture.getFloorId()).add(picture.getUrl());
+//        }
+        return pictureMapper.getPictureByPostID(postId);
     }
 
     @ApiOperation("删除楼层图片")
@@ -87,15 +96,39 @@ public class PictureContoller {
     @AuthToken
     public Message deletePicture(@RequestParam(value = "pictureId") int pictureId) throws IOException {
         Message message = new Message();
-        message.setState(true);
+        Picture picture = pictureMapper.getPictureByPictureID(pictureId);
+        File dest = new File(picDir + picture.getUrl());
+        if(dest.delete()){
+            pictureMapper.deletePictureByPictureID(pictureId);
+            message.setState(true);
+        }else {
+            message.setState(false);
+        }
         return message;
     }
 
     @ApiOperation("上传头像")
     @PostMapping(value = "/uploadAvatar")
     @AuthToken
-    public Message uploadAvatar(@RequestParam("Authorization") String token, @RequestParam(value = "file") MultipartFile file) throws IOException {
+    public Message uploadAvatar(@RequestParam(value = "Authorization") String token,
+                                @RequestParam(value = "file") MultipartFile file) throws IOException {
         Message message = new Message();
+        if (file.isEmpty()) {
+            message.setState(false);
+            message.setMessage("文件为空");
+            return message;
+        }
+        String filename = file.getOriginalFilename();
+        String suffixName = filename.substring(filename.lastIndexOf("."));
+
+        String saveFilename = UUID.randomUUID().toString();
+        String filepath = saveFilename + suffixName;
+        File dest = new File(picDir + filepath);
+        file.transferTo(dest);
+
+        String email = redisProvider.getAuthorizedName(token);
+
+        userMapper.updateAvatarUrl(email, filepath);
         message.setState(true);
         return message;
     }

@@ -23,4 +23,7 @@ public interface UserMapper {
 
     @Select("select name from user where email = #{email}")
     String searchName(String email);
+
+    @Update("update user set avatarUrl = #{filepath} where email = #{email}")
+    void updateAvatarUrl(String email, String filepath);
 }
