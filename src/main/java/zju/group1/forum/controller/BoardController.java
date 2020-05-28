@@ -4,8 +4,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import zju.group1.forum.dto.BoardMessage;
+import zju.group1.forum.dto.Message;
 import zju.group1.forum.dto.Posting;
 import zju.group1.forum.interceptor.AuthToken;
 import zju.group1.forum.mapper.PostingsMapper;
@@ -72,4 +74,12 @@ public class BoardController {
         return message;
     }
 
+    @ApiOperation("修改版面简介")
+    @PostMapping(value = "/boardmodify")
+    @AuthToken
+    public Message boardModify(@RequestParam("Authorization") String token,
+                               @RequestParam("boardId") Integer boardId,
+                               @RequestParam("introduction") String introduction){
+        return new Message();
+    }
 }
