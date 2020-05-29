@@ -32,5 +32,4 @@ public class User {
     @NotBlank(message = "验证码不能为空")
     private String token;
 
-
 }

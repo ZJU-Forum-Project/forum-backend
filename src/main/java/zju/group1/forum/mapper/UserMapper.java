@@ -21,8 +21,17 @@ public interface UserMapper {
     @Select("select count(*) from user where email=#{email}")
     int isUserExist(User user);
 
+    @Select("select count(*) from user where name=#{name}")
+    int isNameExist(User user);
+
     @Select("select name from user where email = #{email}")
     String searchName(String email);
+
+    @Select("select isadmin from user where email = #{email}")
+    String isAdmin(String email);
+
+    @Update("update user set isadmin = #{isAdmin} where email = #{email} ")
+    void setAdmin(String email, String isAdmin);
 
     @Update("update user set avatarUrl = #{filepath} where email = #{email}")
     void updateAvatarUrl(String email, String filepath);

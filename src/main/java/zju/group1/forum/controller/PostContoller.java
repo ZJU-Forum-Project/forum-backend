@@ -82,13 +82,16 @@ public class PostContoller {
         message.setMessage("发送帖子成功");
         return message;
     }
+
     @ApiOperation("修改帖子")
     @PostMapping(value = "/modifyposting")
     @AuthToken
-    public Message modifyPosting(@RequestParam("postingID") int postingID,
+    public Message modifyPosting(@RequestParam("Authorization") String token,
+                                 @RequestParam("postingID") int postingID,
                                  @RequestParam("title") String title,
                                  @RequestParam("content") String content){
         Message message = new Message();
+
         if (title == null) {
             message.setState(false);
             message.setMessage("标题不能为空");
@@ -100,24 +103,56 @@ public class PostContoller {
             return message;
         }
 
-        Posting newPosting = new Posting();
-        newPosting.setId(postingID);
-        newPosting.setTitle(title);
-        newPosting.setContent(content);
-        postingsMapper.modifyPosting(newPosting);
-        message.setState(true);
-        message.setMessage("修改帖子成功");
-        return message;
+        String email = redisProvider.getAuthorizedName(token);
+
+        String name = userMapper.searchName(email);
+        boolean IsAuthor = name.equals(postingsMapper.getAuthorById(postingID));
+        String admin = userMapper.isAdmin(email);
+        boolean IsAdmin = admin.equals("1");
+
+        if (IsAuthor || IsAdmin) {
+            Posting newPosting = new Posting();
+            newPosting.setId(postingID);
+            newPosting.setTitle(title);
+            newPosting.setContent(content);
+            postingsMapper.modifyPosting(newPosting);
+            message.setState(true);
+            message.setMessage("修改帖子成功");
+            message.setAuthorizeToken(token);
+            return message;
+        } else {
+            message.setState(false);
+            message.setMessage("你没有该权限");
+            message.setAuthorizeToken(token);
+            return message;
+        }
     }
+
     @ApiOperation("删除帖子")
     @PostMapping(value = "/deleteposting")
     @AuthToken
-    public Message deletePosting(@RequestParam("postingID") int postingID){
+    public Message deletePosting(@RequestParam("Authorization") String token,
+                                 @RequestParam("postingID") int postingID){
         Message message = new Message();
 
-        postingsMapper.deletePosting(postingID);
-        message.setState(true);
-        message.setMessage("删除帖子成功");
-        return message;
+        String email = redisProvider.getAuthorizedName(token);
+
+        String name = userMapper.searchName(email);
+        boolean IsAuthor = name.equals(postingsMapper.getAuthorById(postingID));
+        String admin = userMapper.isAdmin(email);
+        boolean IsAdmin = admin.equals("1");
+
+        if (IsAuthor || IsAdmin) {
+            postingsMapper.deletePosting(postingID);
+            message.setState(true);
+            message.setMessage("删除帖子成功");
+            message.setAuthorizeToken(token);
+            return message;
+        } else {
+            message.setState(false);
+            message.setMessage("你没有该权限");
+            message.setAuthorizeToken(token);
+            return message;
+        }
     }
 }

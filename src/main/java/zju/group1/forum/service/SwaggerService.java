@@ -41,7 +41,7 @@ public class SwaggerService {
                             "第二轮 前端：王鹏，李林瀚 后端：陈思启，席吉华\n" +
                             "第三轮 前端：代艺博，刘乐为 后端：彭子帆，王汀\n" +
                             "第四轮 前端：王钟毓，孔成俊 后端：陈诺，李林瀚\n" +
-                            "第五轮 前端：",
+                            "第五轮 前端：席吉华，王汀 后端：王鹏，陈思启\n",
                     "V4.0.0",
                     "https://github.com/orgs/ZJU-Forum-Project/dashboard",
                     new Contact("", "", ""),

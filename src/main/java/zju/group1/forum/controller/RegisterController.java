@@ -67,11 +67,18 @@ public class RegisterController {
             message.setMessage("用户已存在");
             return message;
         }
+
+        if (userMapper.isNameExist(user) > 0) {
+            message.setState(false);
+            message.setMessage("用户名已存在");
+            return message;
+        }
         Encryption encryption=new Encryption();
         String cipherText=encryption.encrypt(user.getPassword());
         user.setPassword(cipherText);
 
         userMapper.createUser(user);
+        userMapper.setAdmin(user.getEmail(), "0");
         message.setState(true);
         String authorizeToken = encryptService.getMD5Code(user.getEmail());
         redisProvider.setAuthorizeToken(authorizeToken, user.getEmail());

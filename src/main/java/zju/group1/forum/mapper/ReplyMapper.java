@@ -19,6 +19,9 @@ public interface ReplyMapper {
     @Select("select postId from post_reply where id = #{floorId}")
     int getPostIdByID(int floorId);
 
+    @Select("select author from post_reply where id = #{floorId}")
+    String getAuthorIdByID(int floorId);
+
     @Insert("insert into post_reply (postId,author,content,replyId,floorNumber,replyTime,replyNumber) values (#{postId},#{author},#{content},#{replyId},#{floorNumber},now(),#{replyNumber})")
     void reply(Reply newReply);
 
@@ -36,5 +39,4 @@ public interface ReplyMapper {
     
     @Select("select count(replyState='false') from post_reply where replyid in (select id from post_reply where author = #{name})")
     int getUnreadReplyNumber(String name);
-
 }

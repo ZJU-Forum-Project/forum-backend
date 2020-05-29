@@ -40,7 +40,6 @@ public interface PostingsMapper {
     @Update("update posting set replyN = replyN + 1 where id = #{postingID}")
     void updateReplyNumber(int postingID);
 
-
     @Insert("insert into posting (author,title,type,content,time) values (#{author},#{title},#{type},#{content},now())")
     void Post(Posting newPosting);
 
@@ -50,4 +49,6 @@ public interface PostingsMapper {
     @Delete("delete from posting where id = #{postingID}")
     void deletePosting(int postingID);
 
+    @Select("select author from posting where id = #{postingID}")
+    String getAuthorById(int postingID);
 }

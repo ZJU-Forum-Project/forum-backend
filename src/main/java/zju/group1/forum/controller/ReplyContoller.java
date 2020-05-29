@@ -14,6 +14,7 @@ import zju.group1.forum.dto.ReplyMessage;
 import zju.group1.forum.interceptor.AuthToken;
 import zju.group1.forum.mapper.ReplyMapper;
 import zju.group1.forum.mapper.PostingsMapper;
+import zju.group1.forum.mapper.UserMapper;
 import zju.group1.forum.provider.RedisProvider;
 
 import javax.annotation.Resource;
@@ -26,6 +27,8 @@ import java.sql.Date;
 public class ReplyContoller {
     @Resource
     private ReplyMapper replyMapper;
+    @Resource
+    private UserMapper userMapper;
     @Resource
     private PostingsMapper postingsMapper;
     @Autowired
@@ -132,7 +135,8 @@ public class ReplyContoller {
     @ApiOperation("修改回复")
     @PostMapping(value = "/ModifyFloor")
     @AuthToken
-    public Message modifyfloor(@RequestParam("floorId") int floorId,
+    public Message modifyfloor(@RequestParam("Authorization") String token,
+                               @RequestParam("floorId") int floorId,
                                @RequestParam("content") String content,
                                @RequestParam("replyId") int replyId){
         Message message = new Message();
@@ -143,24 +147,54 @@ public class ReplyContoller {
             return message;
         }
 
-        Reply newReply = new Reply();
-        newReply.setId(floorId);
-        newReply.setContent(content);
-        newReply.setReplyId(replyId);//被回复的楼层ID，普通回帖为0
-        replyMapper.modifyReply(newReply);
-        message.setState(true);
-        message.setMessage("修改回复成功");
-        return message;
+        String email = redisProvider.getAuthorizedName(token);
+        String name1 = userMapper.searchName(email);
+        String name2 = replyMapper.getAuthorIdByID(floorId);
+        boolean IsAuthor = name1.equals(name2);
+        String admin = userMapper.isAdmin(email);
+        boolean IsAdmin = admin.equals("1");
+
+        if (IsAuthor || IsAdmin) {
+            Reply newReply = new Reply();
+            newReply.setId(floorId);
+            newReply.setContent(content);
+            newReply.setReplyId(replyId);//被回复的楼层ID，普通回帖为0
+            replyMapper.modifyReply(newReply);
+            message.setState(true);
+            message.setMessage("修改回复成功");
+            return message;
+        } else {
+            message.setState(false);
+            message.setMessage("你没有该权限");
+            message.setAuthorizeToken(token);
+            return message;
+        }
     }
 
     @ApiOperation("删除回复")
     @PostMapping(value = "/DeleteReply")
     @AuthToken
-    public Message deleteReply(@RequestParam("floorId") int floorId){
+    public Message deleteReply(@RequestParam("Authorization") String token,
+                               @RequestParam("floorId") int floorId){
         Message message = new Message();
-        replyMapper.deleteReply(floorId);
-        message.setState(true);
-        message.setMessage("删除回复成功");
-        return message;
+
+        String email = redisProvider.getAuthorizedName(token);
+        String name1 = userMapper.searchName(email);
+        String name2 = replyMapper.getAuthorIdByID(floorId);
+        boolean IsAuthor = name1.equals(name2);
+        String admin = userMapper.isAdmin(email);
+        boolean IsAdmin = admin.equals("1");
+
+        if (IsAuthor || IsAdmin) {
+            replyMapper.deleteReply(floorId);
+            message.setState(true);
+            message.setMessage("删除回复成功");
+            return message;
+        } else {
+            message.setState(false);
+            message.setMessage("你没有该权限");
+            message.setAuthorizeToken(token);
+            return message;
+        }
     }
 }
