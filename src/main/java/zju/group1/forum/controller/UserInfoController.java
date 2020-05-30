@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import zju.group1.forum.dto.InfoMessage;
+import zju.group1.forum.dto.Message;
 import zju.group1.forum.dto.UserInfo;
 import zju.group1.forum.interceptor.AuthToken;
 import zju.group1.forum.mapper.UserInfoMapper;
+import zju.group1.forum.mapper.UserMapper;
 import zju.group1.forum.provider.RedisProvider;
 
 import javax.annotation.Resource;
@@ -26,8 +28,28 @@ public class UserInfoController {
     @Resource
     private UserInfoMapper userInfoMapper;
 
+    @Resource
+    private UserMapper userMapper;
+
     @Autowired
     private RedisProvider redisProvider;
+
+    @ApiOperation("判断是否管理员")
+    @PostMapping(value = "/isAdmin")
+    @AuthToken
+    public Message isAdmin(@RequestParam("Authorization") String authorizaToken) {
+        Message message = new Message();
+        /*message的message属性值为1表示是管理员，0表示不是管理员*/
+
+        String email = redisProvider.getAuthorizedName(authorizaToken);
+        String admin = userMapper.isAdmin(email);
+
+        message.setState(true);
+        message.setMessage(admin);
+        message.setAuthorizeToken(authorizaToken);
+
+        return message;
+    }
 
     @ApiOperation("查看个人信息")
     @PostMapping(value = "/queryinfo")
