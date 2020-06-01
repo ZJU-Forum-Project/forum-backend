@@ -21,6 +21,7 @@ public class ReplyMessage {
     private int floorId;//表示数据库中的楼层ID,用于调用其他函数时传给后端
     private int replyUI;//表示被回复的楼层前端楼层号，普通回帖则为0
     private int replyId;//表示被回复楼层的ID，普通回帖则为0
+    private Integer reputation;
 
     public void setReplyInfo(Reply reply){
         setAuthor(reply.getAuthor());
@@ -31,6 +32,5 @@ public class ReplyMessage {
         setFloorUI(reply.getFloorNumber());
         setReplyId(reply.getReplyId());
         setReplyUI(reply.getReplyNumber());
-        return;
     }
 }

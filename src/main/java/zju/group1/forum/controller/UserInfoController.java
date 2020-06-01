@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import zju.group1.forum.dto.InfoMessage;
 import zju.group1.forum.dto.Message;
+import zju.group1.forum.dto.OtherUserInfoMessage;
 import zju.group1.forum.dto.UserInfo;
 import zju.group1.forum.interceptor.AuthToken;
 import zju.group1.forum.mapper.UserInfoMapper;
@@ -51,6 +52,14 @@ public class UserInfoController {
         return message;
     }
 
+    @ApiOperation("查看他人个人主页")
+    @PostMapping(value = "/info")
+    @AuthToken
+    public OtherUserInfoMessage userInfo(@RequestParam("username") String username){
+        OtherUserInfoMessage otherUserInfoMessage = new OtherUserInfoMessage();
+        return otherUserInfoMessage;
+    }
+
     @ApiOperation("查看个人信息")
     @PostMapping(value = "/queryinfo")
     @AuthToken
@@ -81,27 +90,9 @@ public class UserInfoController {
         infoMessage.setMessage("查询成功！");
         infoMessage.setAuthorizeToken(authorizaToken);
         infoMessage.setInfo(userInfo);
-        /*
-        infoMessage.setReal_name(userInfo.getReal_name());
-        infoMessage.setReal_name_hidden(userInfo.getReal_name_hidden());
-        infoMessage.setEmail(userInfo.getEmail());
-        infoMessage.setEamil_hidden(userInfo.getEamil_hidden());
-        infoMessage.setBirth(userInfo.getBirth());
-        infoMessage.setBirth_hidden(userInfo.getBirth_hidden());
-        infoMessage.setGender(userInfo.getGender());
-        infoMessage.setGender_hidden(userInfo.getGender_hidden());
-        infoMessage.setHometown(userInfo.getHometown());
-        infoMessage.setHometown_hidden(userInfo.getHometown_hidden());
-        infoMessage.setOrganization(userInfo.getOrganization());
-        infoMessage.setOrganization_hidden(userInfo.getOrganization_hidden());
-        infoMessage.setPhone(userInfo.getPhone());
-        infoMessage.setPhone_hidden(userInfo.getPhone_hidden());
-        infoMessage.setSignature(userInfo.getSignature());
-         */
+
         return infoMessage;
     }
-
-
 
     @ApiOperation("修改个人信息")
     @PostMapping(value = "/editinfo")

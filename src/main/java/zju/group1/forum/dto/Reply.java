@@ -8,6 +8,7 @@ public class Reply {
     private int postId;//关联帖子数据库
     private String postName;
     private String author;//关联用户数据库外键
+    private Integer reputation;
     private String content;
     private String replyTime;
     private int replyId;//被回复的楼层ID，普通回帖为0

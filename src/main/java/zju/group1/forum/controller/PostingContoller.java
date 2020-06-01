@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.ArrayList;
-import zju.group1.forum.dto.Posting;
-import zju.group1.forum.dto.PostingMessage;
-import zju.group1.forum.dto.Reply;
-import zju.group1.forum.dto.ReplyMessage;
+
+import zju.group1.forum.dto.*;
 import zju.group1.forum.interceptor.AuthToken;
 import zju.group1.forum.mapper.PostingsMapper;
 import zju.group1.forum.mapper.ReplyMapper;
@@ -42,17 +40,29 @@ public class PostingContoller {
         postingsMapper.updateVisitNumber(postingID);
 
         List<Reply> replyList=replyMapper.getReplyByPostID(postingID);
-        List<ReplyMessage> replyMessageList=new ArrayList();
+        List<ReplyMessage> replyMessageList=new ArrayList<>();
         for(int i=0;i<replyList.size();i++){
             ReplyMessage mid=new ReplyMessage();
             int floorId=replyList.get(i).getId();
             Reply reply=replyMapper.getReplyByID(floorId);
             mid.setReplyInfo(reply);
             replyMessageList.add(mid);
+
+            //查询reputation
+
         }
         postingMessage.setReplyList(replyMessageList);
 
         return postingMessage;
+    }
+
+    @ApiOperation("查看最新十条帖子")
+    @PostMapping(value = "/latestpostings")
+    @AuthToken
+    public BoardMessage checkLatestPostings() {
+        BoardMessage boardMessage = new BoardMessage();
+
+        return boardMessage;
     }
     
 }
