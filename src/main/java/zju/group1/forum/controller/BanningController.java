@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import zju.group1.forum.dto.Message;
 import zju.group1.forum.interceptor.AuthToken;
+import zju.group1.forum.mapper.UserMapper;
 import zju.group1.forum.provider.RedisProvider;
 
-
+import javax.annotation.Resource;
 
 
 @Api(tags = "禁言相关操作")
@@ -20,6 +21,8 @@ public class BanningController {
 
     @Autowired
     private RedisProvider redisProvider;
+    @Resource
+    private UserMapper userMapper;
 
     @ApiOperation("执行禁言")
     @PostMapping(value = "/banUser")
@@ -98,15 +101,43 @@ public class BanningController {
     }
 
 
-    @ApiOperation("查询是否为禁言状态")
-    @PostMapping(value = "/checkIfBanned")
+    @ApiOperation("查询指定author是否为禁言状态")
+    @PostMapping(value = "/checkIfBannedByAuthor")
     @AuthToken
-    public Message checkIfBanned(@RequestParam("Authorization") String token,
-                                @RequestParam("author") String author
+    public Message checkIfBannedByAuthor(@RequestParam("Authorization") String token,
+                                        @RequestParam("author") String author
     )
     {
         Message message = new Message();
 
+
+        if(redisProvider.checkIfBanned(author)){
+
+            message.setState(true);
+            message.setMessage("用户为禁言状态");
+            message.setAuthorizeToken(token);
+        }
+
+        else{
+            message.setState(false);
+            message.setMessage("用户不在禁言状态");
+            message.setAuthorizeToken(token);
+        }
+
+
+        return message;
+    }
+
+    @ApiOperation("查询指定token是否为禁言状态")
+    @PostMapping(value = "/checkIfBannedByAuthorization")
+    @AuthToken
+    public Message checkIfBannedByAuthorization(@RequestParam("Authorization") String token)
+    {
+        Message message = new Message();
+
+        String email = redisProvider.getAuthorizedName(token);
+
+        String author = userMapper.searchName(email);
 
         if(redisProvider.checkIfBanned(author)){
 
