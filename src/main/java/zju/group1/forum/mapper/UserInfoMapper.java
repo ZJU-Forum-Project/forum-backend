@@ -25,4 +25,7 @@ public interface UserInfoMapper {
             "organization = #{organization}, organization_hidden = #{organization_hidden}, " +
             "signature = #{signature} where email = #{email}")
     void updateUserInfo(UserInfo info);
+
+    @Select("select reputation from user_info where email=#{email}")
+    Integer getReputationByEmail(String email);
 }

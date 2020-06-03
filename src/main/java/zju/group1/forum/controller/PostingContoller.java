@@ -14,6 +14,8 @@ import zju.group1.forum.dto.*;
 import zju.group1.forum.interceptor.AuthToken;
 import zju.group1.forum.mapper.PostingsMapper;
 import zju.group1.forum.mapper.ReplyMapper;
+import zju.group1.forum.mapper.UserInfoMapper;
+import zju.group1.forum.mapper.UserMapper;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -25,6 +27,10 @@ public class PostingContoller {
     private PostingsMapper postingsMapper;
     @Resource
     private ReplyMapper replyMapper;
+    @Resource
+    private UserMapper userMapper;
+    @Resource
+    private UserInfoMapper userInfoMapper;
 
     @ApiOperation("查看编号“postingID”的帖子")
     @PostMapping(value = "/postings/{postingID}")
@@ -46,10 +52,12 @@ public class PostingContoller {
             int floorId=replyList.get(i).getId();
             Reply reply=replyMapper.getReplyByID(floorId);
             mid.setReplyInfo(reply);
+            //查询reputation和头像链接
+            //设置头像链接
+            mid.setAvatarUrl(userMapper.getAvatarUrlByName(reply.getAuthor()));
+            //设置reputation
+            mid.setReputation(userInfoMapper.getReputationByEmail(userMapper.getEmailByName(reply.getAuthor())));
             replyMessageList.add(mid);
-
-            //查询reputation
-
         }
         postingMessage.setReplyList(replyMessageList);
 

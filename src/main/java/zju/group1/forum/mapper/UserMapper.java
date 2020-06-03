@@ -35,4 +35,10 @@ public interface UserMapper {
 
     @Update("update user set avatarUrl = #{filepath} where email = #{email}")
     void updateAvatarUrl(String email, String filepath);
+
+    @Select("select avatarUrl from user where name=#{name}")
+    String getAvatarUrlByName(String name);
+
+    @Select("select email from user where name=#{name}")
+    String getEmailByName(String name);
 }

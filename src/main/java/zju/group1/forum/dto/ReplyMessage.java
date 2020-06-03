@@ -22,6 +22,7 @@ public class ReplyMessage {
     private int replyUI;//表示被回复的楼层前端楼层号，普通回帖则为0
     private int replyId;//表示被回复楼层的ID，普通回帖则为0
     private Integer reputation;
+    private String avatarUrl;
 
     public void setReplyInfo(Reply reply){
         setAuthor(reply.getAuthor());
