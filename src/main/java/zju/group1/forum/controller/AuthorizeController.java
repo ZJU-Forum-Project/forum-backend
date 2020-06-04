@@ -3,14 +3,16 @@ package zju.group1.forum.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import zju.group1.forum.dto.AccessToken;
 import zju.group1.forum.dto.Encryption;
 import zju.group1.forum.dto.Message;
 import zju.group1.forum.dto.User;
 import zju.group1.forum.mapper.UserMapper;
 import zju.group1.forum.provider.GithubProvider;
-import org.springframework.beans.factory.annotation.Value;
 import zju.group1.forum.provider.RedisProvider;
 import zju.group1.forum.service.EncryptService;
 

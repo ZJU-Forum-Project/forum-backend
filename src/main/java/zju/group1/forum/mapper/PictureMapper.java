@@ -1,7 +1,11 @@
 package zju.group1.forum.mapper;
 
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import zju.group1.forum.dto.Picture;
+
 import java.util.List;
 
 @Mapper

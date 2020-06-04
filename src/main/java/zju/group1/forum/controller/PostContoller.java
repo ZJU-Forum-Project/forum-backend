@@ -16,8 +16,6 @@ import zju.group1.forum.mapper.UserMapper;
 import zju.group1.forum.provider.RedisProvider;
 
 import javax.annotation.Resource;
-import java.io.IOException;
-import java.sql.Date;
 
 @Api(tags = "发送、修改和删除帖")
 @RestController

@@ -4,25 +4,20 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import zju.group1.forum.dto.*;
+import zju.group1.forum.dto.Message;
+import zju.group1.forum.dto.Picture;
 import zju.group1.forum.interceptor.AuthToken;
 import zju.group1.forum.mapper.PictureMapper;
-import zju.group1.forum.mapper.PostingsMapper;
-import zju.group1.forum.mapper.ReplyMapper;
 import zju.group1.forum.mapper.UserMapper;
 import zju.group1.forum.provider.RedisProvider;
 
 import javax.annotation.Resource;
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -83,23 +78,14 @@ public class PictureContoller {
     @ApiOperation("查看帖子图片")
     @PostMapping(value = "/seePicture")
     @AuthToken
-    public List<Picture> seePicture(@RequestParam("postId") int postId) throws IOException {
- //       List<List<String>> arrayList = new ArrayList<>();
-
-//        int maxFloorN = pictureMapper.getMaxFloorNumberByPostID(postId);
-//        for (int i = 0; i <= maxFloorN; i++) {
-//            arrayList.add(new ArrayList<>());
-//        }
-//        for (Picture picture : pictureByPostID) {
-//            arrayList.get(picture.getFloorId()).add(picture.getUrl());
-//        }
+    public List<Picture> seePicture(@RequestParam("postId") int postId) {
         return pictureMapper.getPictureByPostID(postId);
     }
 
     @ApiOperation("删除楼层图片")
     @PostMapping(value = "/deletePicture")
     @AuthToken
-    public Message deletePicture(@RequestParam(value = "pictureId") int pictureId) throws IOException {
+    public Message deletePicture(@RequestParam(value = "pictureId") int pictureId) {
         Message message = new Message();
         Picture picture = pictureMapper.getPictureByPictureID(pictureId);
         File dest = new File(picDir + picture.getUrl());

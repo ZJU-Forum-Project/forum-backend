@@ -2,18 +2,16 @@ package zju.group1.forum.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import zju.group1.forum.dto.Message;
-import zju.group1.forum.dto.PersonalMessage;
-import zju.group1.forum.dto.ReplyMessage;
-import zju.group1.forum.mapper.ReplyMapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import zju.group1.forum.dto.Message;
+import zju.group1.forum.dto.PersonalMessage;
 import zju.group1.forum.dto.Reply;
 import zju.group1.forum.interceptor.AuthToken;
 import zju.group1.forum.mapper.PostingsMapper;
+import zju.group1.forum.mapper.ReplyMapper;
 import zju.group1.forum.mapper.UserMapper;
 import zju.group1.forum.provider.RedisProvider;
 
