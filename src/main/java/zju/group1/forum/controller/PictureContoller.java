@@ -31,7 +31,7 @@ import java.util.UUID;
  create table post_picture
 (
 	postId mediumint not null,
-	floorNum mediumint not null,
+	floorNumber mediumint not null,
 	url varchar(100) not null
 );
  * */
@@ -64,6 +64,11 @@ public class PictureContoller {
             return message;
         }
         String filename = file.getOriginalFilename();
+        if(filename==null){
+            message.setState(false);
+            message.setMessage("文件名为空");
+            return message;
+        }
         String suffixName = filename.substring(filename.lastIndexOf("."));
 
         String saveFilename = UUID.randomUUID().toString();
@@ -119,6 +124,11 @@ public class PictureContoller {
             return message;
         }
         String filename = file.getOriginalFilename();
+        if(filename==null){
+            message.setState(false);
+            message.setMessage("文件名为空");
+            return message;
+        }
         String suffixName = filename.substring(filename.lastIndexOf("."));
 
         String saveFilename = UUID.randomUUID().toString();
