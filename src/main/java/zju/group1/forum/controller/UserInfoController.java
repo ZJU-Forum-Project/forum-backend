@@ -57,6 +57,19 @@ public class UserInfoController {
     @AuthToken
     public OtherUserInfoMessage userInfo(@RequestParam("username") String username){
         OtherUserInfoMessage otherUserInfoMessage = new OtherUserInfoMessage();
+        UserInfo userInfo = userInfoMapper.getUserInfo(userMapper.getEmailByName(username));
+        //逻辑判断是否隐藏
+        if(userInfo.getBirth_hidden()==0){ otherUserInfoMessage.setBirth(userInfo.getBirth()); }
+        else{ otherUserInfoMessage.setBirth(new Date(0,1,1)); }
+        if(userInfo.getGender_hidden()==0){otherUserInfoMessage.setGender(userInfo.getGender());}
+        else {otherUserInfoMessage.setGender("");}
+        if(userInfo.getHometown_hidden()==0){otherUserInfoMessage.setHometown(userInfo.getHometown());}
+        else {otherUserInfoMessage.setHometown("");}
+        if(userInfo.getOrganization_hidden()==0){otherUserInfoMessage.setOrganization(userInfo.getOrganization());}
+        else {otherUserInfoMessage.setOrganization("");}
+        otherUserInfoMessage.setReputation(userInfo.getReputation());
+        otherUserInfoMessage.setSignature(userInfo.getSignature());
+        //返回
         return otherUserInfoMessage;
     }
 
