@@ -51,4 +51,7 @@ public interface PostingsMapper {
 
     @Select("select author from posting where id = #{postingID}")
     String getAuthorById(int postingID);
+
+    @Select("select * from posting order by id desc limit 10")
+    List<Posting> listLastest();
 }

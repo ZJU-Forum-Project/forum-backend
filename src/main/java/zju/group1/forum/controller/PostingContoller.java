@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import zju.group1.forum.dto.*;
 import zju.group1.forum.interceptor.AuthToken;
@@ -62,12 +63,14 @@ public class PostingContoller {
     }
 
     @ApiOperation("查看最新十条帖子")
-    @PostMapping(value = "/latestpostings")
+    @PostMapping(value = "/checkLatestPostings")
     @AuthToken
-    public BoardMessage checkLatestPostings() {
+    public BoardMessage checkLatestPostings() throws IOException {
         BoardMessage boardMessage = new BoardMessage();
-
+        List<Posting> postingList = postingsMapper.listLastest();
+        boardMessage.setState(true);
+        boardMessage.setPostings(postingList);
+        boardMessage.setMessage("获取最新发帖成功");
         return boardMessage;
     }
-    
 }

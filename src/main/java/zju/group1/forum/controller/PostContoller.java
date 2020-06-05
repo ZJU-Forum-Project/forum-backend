@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import zju.group1.forum.dto.BoardMessage;
 import zju.group1.forum.dto.Message;
 import zju.group1.forum.dto.Posting;
 import zju.group1.forum.dto.Reply;
@@ -16,6 +17,7 @@ import zju.group1.forum.mapper.UserMapper;
 import zju.group1.forum.provider.RedisProvider;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Api(tags = "发送、修改和删除帖")
 @RestController
@@ -153,4 +155,5 @@ public class PostContoller {
             return message;
         }
     }
+
 }
