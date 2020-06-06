@@ -84,9 +84,7 @@ public class PictureContoller {
         Map<Integer, Picture> pictureMap = new HashMap<>();
         List<Picture> pictures = pictureMapper.getPictureByPostID(postId);
         for (Picture picture : pictures) {
-            pictureMap.get(picture.getFloorNumber()).setFloorNumber(picture.getFloorNumber());
-            pictureMap.get(picture.getFloorNumber()).setPictureId(picture.getPictureId());
-            pictureMap.get(picture.getFloorNumber()).setUrl(picture.getUrl());
+            pictureMap.put(picture.getFloorNumber(), picture);
         }
         return pictureMap;
     }
