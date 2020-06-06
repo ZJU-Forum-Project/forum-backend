@@ -80,13 +80,18 @@ public class PictureContoller {
     @ApiOperation("查看帖子图片")
     @PostMapping(value = "/seePicture")
     @AuthToken
-    public Map<Integer, Picture> seePicture(@RequestParam("postId") int postId) {
-        Map<Integer, Picture> pictureMap = new HashMap<>();
+    public List<Picture> seePicture(@RequestParam("postId") int postId) {
+        int maxFloorNumberByPostID = pictureMapper.getMaxFloorNumberByPostID(postId);
         List<Picture> pictures = pictureMapper.getPictureByPostID(postId);
-        for (Picture picture : pictures) {
-            pictureMap.put(picture.getFloorNumber(), picture);
+        for(int i = 0;i <= maxFloorNumberByPostID;i++){
+            pictures.add(new Picture());
         }
-        return pictureMap;
+        for (Picture picture : pictures) {
+            pictures.get(picture.getFloorNumber()).setUrl(picture.getUrl());
+            pictures.get(picture.getFloorNumber()).setFloorNumber(picture.getFloorNumber());
+            pictures.get(picture.getFloorNumber()).setPostId(picture.getPostId());
+        }
+        return pictures;
     }
 
     @ApiOperation("删除楼层图片")
