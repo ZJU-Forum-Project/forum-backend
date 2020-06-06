@@ -69,6 +69,7 @@ public class UserInfoController {
         else {otherUserInfoMessage.setOrganization("");}
         otherUserInfoMessage.setReputation(userInfo.getReputation());
         otherUserInfoMessage.setSignature(userInfo.getSignature());
+        otherUserInfoMessage.setAvatarUrl(userMapper.getAvatarUrlByName(username));
         //返回
         return otherUserInfoMessage;
     }
@@ -93,7 +94,8 @@ public class UserInfoController {
             infoMessage.setAuthorizeToken(authorizaToken);
             return infoMessage;
         }
-
+        //设置头像
+        infoMessage.setAvatarUrl(userMapper.getAvatarUrlByName(userMapper.searchName(email)));
         if (userInfoMapper.isUserInfoExist(email) == 0) {
             userInfoMapper.createUserInfo(email);
         }

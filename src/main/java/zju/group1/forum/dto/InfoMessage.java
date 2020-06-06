@@ -35,6 +35,7 @@ public class InfoMessage {
 
     private String signature;
     private Integer reputation;
+    private String avatarUrl;
 
     public void setInfo(UserInfo info) {
         setBirth(info.getBirth());
