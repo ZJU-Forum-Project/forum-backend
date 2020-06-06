@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Picture {
-    private int pictureId;
+    private int postId;
     private int floorNumber;
     private String url;
 }
