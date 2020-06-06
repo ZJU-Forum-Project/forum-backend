@@ -13,7 +13,7 @@ public interface PictureMapper {
     @Select("select max(floorId) from post_picture where postId = #{postId}")
     int getMaxFloorNumberByPostID(int postId);
 
-    @Select("select * from post_picture where postId = #{postId}")
+    @Select("select * from post_picture where postId = #{postId} ")
     List<Picture> getPictureByPostID(int postId);
 
     @Insert("insert into post_picture (postId,floorNumber,url) values (#{postId},#{floorNumber},#{url})")

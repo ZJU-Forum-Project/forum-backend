@@ -18,7 +18,9 @@ import zju.group1.forum.provider.RedisProvider;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /*
@@ -59,7 +61,7 @@ public class PictureContoller {
             return message;
         }
         String filename = file.getOriginalFilename();
-        if(filename==null){
+        if (filename == null) {
             message.setState(false);
             message.setMessage("文件名为空");
             return message;
@@ -79,7 +81,14 @@ public class PictureContoller {
     @PostMapping(value = "/seePicture")
     @AuthToken
     public List<Picture> seePicture(@RequestParam("postId") int postId) {
-        return pictureMapper.getPictureByPostID(postId);
+        Map<Integer, Picture> pictureMap = new HashMap<>();
+        List<Picture> pictures = pictureMapper.getPictureByPostID(postId);
+        for (Picture picture : pictures) {
+            pictureMap.get(picture.getFloorNumber()).setFloorNumber(picture.getFloorNumber());
+            pictureMap.get(picture.getFloorNumber()).setPictureId(picture.getPictureId());
+            pictureMap.get(picture.getFloorNumber()).setUrl(picture.getUrl());
+        }
+        return pictures;
     }
 
     @ApiOperation("删除楼层图片")
@@ -89,10 +98,10 @@ public class PictureContoller {
         Message message = new Message();
         Picture picture = pictureMapper.getPictureByPictureID(pictureId);
         File dest = new File(picDir + picture.getUrl());
-        if(dest.delete()){
+        if (dest.delete()) {
             pictureMapper.deletePictureByPictureID(pictureId);
             message.setState(true);
-        }else {
+        } else {
             message.setState(false);
         }
         return message;
@@ -110,7 +119,7 @@ public class PictureContoller {
             return message;
         }
         String filename = file.getOriginalFilename();
-        if(filename==null){
+        if (filename == null) {
             message.setState(false);
             message.setMessage("文件名为空");
             return message;
