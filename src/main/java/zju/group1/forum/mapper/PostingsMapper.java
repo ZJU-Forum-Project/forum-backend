@@ -7,17 +7,18 @@ import java.util.List;
 
 @Mapper
 public interface PostingsMapper {
-    @Select("select * from posting where type = 1")
-    List<Posting> listStudy();
 
-    @Select("select * from posting where type = 2")
+    @Select("select * from posting where type = 1")
     List<Posting> listEmotion();
 
-    @Select("select * from posting where type = 3")
+    @Select("select * from posting where type = 2")
     List<Posting> listInformation();
 
-    @Select("select * from posting where type = 4")
+    @Select("select * from posting where type = 3")
     List<Posting> listIntern();
+
+    @Select("select * from posting where type = 4")
+    List<Posting> listStudy();
 
     @Select("select * from posting where author = #{name}")
     List<Posting> listPersonalPostings(String name);

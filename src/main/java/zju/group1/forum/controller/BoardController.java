@@ -35,21 +35,6 @@ public class BoardController {
     @Autowired
     RedisProvider redisProvider;
 
-    @ApiOperation("学习板块")
-    @PostMapping(value = "/study")
-    @AuthToken
-    public BoardMessage studyBoard() {
-        BoardMessage message = new BoardMessage();
-
-        List<Posting> postingList = postingsMapper.listStudy();
-        message.setState(true);
-        String intro = boardMapper.getIntro(4);
-        message.setIntro(intro);
-        message.setPostings(postingList);
-        message.setMessage("获取学习板块帖子成功");
-        return message;
-    }
-
     @ApiOperation("情感板块")
     @PostMapping(value = "/emotion")
     @AuthToken
@@ -65,7 +50,7 @@ public class BoardController {
         return message;
     }
 
-    @ApiOperation("校园信息板块")
+    @ApiOperation("校园生活板块")
     @PostMapping(value = "/information")
     @AuthToken
     public BoardMessage informationBoard() {
@@ -92,6 +77,21 @@ public class BoardController {
         message.setIntro(intro);
         message.setPostings(postingList);
         message.setMessage("获取实习信息板块帖子成功");
+        return message;
+    }
+
+    @ApiOperation("学习板块")
+    @PostMapping(value = "/study")
+    @AuthToken
+    public BoardMessage studyBoard() {
+        BoardMessage message = new BoardMessage();
+
+        List<Posting> postingList = postingsMapper.listStudy();
+        message.setState(true);
+        String intro = boardMapper.getIntro(4);
+        message.setIntro(intro);
+        message.setPostings(postingList);
+        message.setMessage("获取学习板块帖子成功");
         return message;
     }
 
