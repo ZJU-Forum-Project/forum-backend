@@ -2,6 +2,7 @@ package zju.group1.forum.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -143,22 +144,33 @@ public class PictureContoller {
     }
 
     @ApiOperation("获取图片")
-    @GetMapping(value = "getBase64PictureByUrl")
-    public String getBase64PictureByUrl(@RequestParam(value = "url") String URL) throws IOException {
+    @GetMapping(value = "/getBase64PictureByUrl")
+    public String getBase64PictureByUrl(@RequestParam(value = "url") String URL) throws Exception {
         File file = new File("/home/" + URL);
         BufferedImage image = ImageIO.read(file);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         String format = URL.substring(URL.indexOf('.') + 1);
         ImageIO.write(image, format, stream);
         byte[] encode = Base64.getEncoder().encode(stream.toByteArray());
-        return new String(encode);
+
+        if (format.equals("gif")) {
+            return "data:image/gif;base64," + new String(encode);
+        } else if (format.equals("png")) {
+            return "data:image/png;base64," + new String(encode);
+        } else if (format.equals("jpeg")) {
+            return "data:image/jpeg;base64," + new String(encode);
+        }
+        throw new Exception("不支持的文件格式");
     }
 
+
+    @RequestMapping(value = "/getPictureByUrl", produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
-    @GetMapping(value = "getPictureByUrl")
-    public BufferedImage getPictureByUrl(@RequestParam(value = "url") String URL) throws IOException {
-        return ImageIO.read(new FileInputStream(new File("/home/" + URL)));
+    public byte[] getPictureByUrl(@RequestParam(value = "url") String URL) throws IOException {
+        File file = new File("/home/" + URL);
+        FileInputStream inputStream = new FileInputStream(file);
+        byte[] bytes = new byte[inputStream.available()];
+        inputStream.read(bytes, 0, inputStream.available());
+        return bytes;
     }
-
-
 }
