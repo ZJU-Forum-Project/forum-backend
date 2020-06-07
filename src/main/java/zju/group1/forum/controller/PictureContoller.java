@@ -4,10 +4,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import zju.group1.forum.dto.Message;
 import zju.group1.forum.dto.Picture;
@@ -145,8 +143,8 @@ public class PictureContoller {
     }
 
     @ApiOperation("获取图片")
-    @GetMapping(value = "getPictureByUrl")
-    public String getPictureByUrl(@RequestParam(value = "url") String URL) throws IOException {
+    @GetMapping(value = "getBase64PictureByUrl")
+    public String getBase64PictureByUrl(@RequestParam(value = "url") String URL) throws IOException {
         File file = new File("/home/" + URL);
         BufferedImage image = ImageIO.read(file);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -155,4 +153,12 @@ public class PictureContoller {
         byte[] encode = Base64.getEncoder().encode(stream.toByteArray());
         return new String(encode);
     }
+
+    @ResponseBody
+    @GetMapping(value = "getPictureByUrl")
+    public BufferedImage getPictureByUrl(@RequestParam(value = "url") String URL) throws IOException {
+        return ImageIO.read(new FileInputStream(new File("/home/" + URL)));
+    }
+
+
 }
