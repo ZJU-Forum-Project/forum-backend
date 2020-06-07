@@ -79,16 +79,17 @@ public class PictureContoller {
     @AuthToken
     public List<Picture> seePicture(@RequestParam("postId") int postId) {
         int maxFloorNumberByPostID = pictureMapper.getMaxFloorNumberByPostID(postId);
+        List<Picture> all_pictures = new ArrayList<>();
         List<Picture> pictures = pictureMapper.getPictureByPostID(postId);
         for (int i = 0; i <= maxFloorNumberByPostID; i++) {
-            pictures.add(new Picture());
+            all_pictures.add(new Picture());
         }
         for (Picture picture : pictures) {
-            pictures.get(picture.getFloorNumber()).setUrl(picture.getUrl());
-            pictures.get(picture.getFloorNumber()).setFloorNumber(picture.getFloorNumber());
-            pictures.get(picture.getFloorNumber()).setPostId(picture.getPostId());
+            all_pictures.get(picture.getFloorNumber()).setUrl(picture.getUrl());
+            all_pictures.get(picture.getFloorNumber()).setFloorNumber(picture.getFloorNumber());
+            all_pictures.get(picture.getFloorNumber()).setPostId(picture.getPostId());
         }
-        return pictures;
+        return all_pictures;
     }
 
     @ApiOperation("删除楼层图片")
