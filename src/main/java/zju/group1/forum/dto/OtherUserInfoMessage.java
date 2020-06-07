@@ -20,4 +20,6 @@ public class OtherUserInfoMessage {
     private String signature;
 
     private Integer reputation;
+
+    private String avatarUrl;
 }
