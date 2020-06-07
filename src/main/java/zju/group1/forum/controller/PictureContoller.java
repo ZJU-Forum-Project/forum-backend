@@ -80,8 +80,6 @@ public class PictureContoller {
     public List<Picture> seePicture(@RequestParam("postId") int postId) {
         int maxFloorNumberByPostID = pictureMapper.getMaxFloorNumberByPostID(postId);
         List<Picture> pictures = pictureMapper.getPictureByPostID(postId);
-        if (pictures == null)
-            return new ArrayList<>();
         for (int i = 0; i <= maxFloorNumberByPostID; i++) {
             pictures.add(new Picture());
         }

@@ -10,7 +10,7 @@ import java.util.List;
 
 @Mapper
 public interface PictureMapper {
-    @Select("select max(floorNumber) from post_picture where postId = #{postId}")
+    @Select("select IFNULL(max(floorNumber),0) from post_picture where postId = #{postId}")
     int getMaxFloorNumberByPostID(int postId);
 
     @Select("select * from post_picture where postId = #{postId} ")
