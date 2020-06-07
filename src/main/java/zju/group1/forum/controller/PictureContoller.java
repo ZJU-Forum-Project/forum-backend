@@ -17,11 +17,13 @@ import zju.group1.forum.mapper.UserMapper;
 import zju.group1.forum.provider.RedisProvider;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.sql.Array;
 import java.util.*;
+import java.util.List;
 
 /*
  * 帖子的数据库名称为post_picture
@@ -145,11 +147,12 @@ public class PictureContoller {
     @ApiOperation("获取图片")
     @GetMapping(value = "getPictureByUrl")
     public String getPictureByUrl(@RequestParam(value = "url") String URL) throws IOException {
-        FileInputStream fin = new FileInputStream(new File("/home/" + URL));
-        byte[] bytes = new byte[fin.available()];
-        fin.read(bytes);
-        fin.close();
-        byte[] pictureString = Base64.getDecoder().decode(bytes);
-        return Arrays.toString(pictureString);
+        File file = new File("/home/" + URL);
+        BufferedImage image = ImageIO.read(file);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        String format = URL.substring(URL.indexOf('.') + 1);
+        ImageIO.write(image, format, stream);
+        byte[] encode = Base64.getEncoder().encode(stream.toByteArray());
+        return new String(encode);
     }
 }
