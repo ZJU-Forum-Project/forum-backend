@@ -18,10 +18,7 @@ import zju.group1.forum.provider.RedisProvider;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /*
  * 帖子的数据库名称为post_picture
@@ -83,7 +80,9 @@ public class PictureContoller {
     public List<Picture> seePicture(@RequestParam("postId") int postId) {
         int maxFloorNumberByPostID = pictureMapper.getMaxFloorNumberByPostID(postId);
         List<Picture> pictures = pictureMapper.getPictureByPostID(postId);
-        for(int i = 0;i <= maxFloorNumberByPostID;i++){
+        if (pictures == null)
+            return new ArrayList<>();
+        for (int i = 0; i <= maxFloorNumberByPostID; i++) {
             pictures.add(new Picture());
         }
         for (Picture picture : pictures) {
