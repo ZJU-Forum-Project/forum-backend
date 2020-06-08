@@ -157,10 +157,9 @@ public class PictureContoller {
             return "data:image/gif;base64," + new String(encode);
         } else if (format.equals("png")) {
             return "data:image/png;base64," + new String(encode);
-        } else if (format.equals("jpeg")) {
+        } else {
             return "data:image/jpeg;base64," + new String(encode);
         }
-        throw new Exception("不支持的文件格式");
     }
 
 
