@@ -96,6 +96,7 @@ public class PictureContoller {
             all_pictures.get(picture.getFloorNumber()).setUrl(picture.getUrl());
             all_pictures.get(picture.getFloorNumber()).setFloorNumber(picture.getFloorNumber());
             all_pictures.get(picture.getFloorNumber()).setPostId(picture.getPostId());
+            all_pictures.get(picture.getFloorNumber()).setPictureId(picture.getPictureId());
         }
         return all_pictures;
     }

@@ -7,4 +7,5 @@ public class Picture {
     private int postId;
     private int floorNumber;
     private String url;
+    private String pictureId;
 }
