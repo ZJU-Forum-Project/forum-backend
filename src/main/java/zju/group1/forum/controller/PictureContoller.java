@@ -151,7 +151,7 @@ public class PictureContoller {
     @ApiOperation("获取图片")
     @GetMapping(value = "/getBase64PictureByUrl")
     public String getBase64PictureByUrl(@RequestParam(value = "url") String URL) throws Exception {
-        File file = new File("/Users/wzy/Desktop/" + URL);
+        File file = new File("/home/" + URL);
         BufferedImage image = ImageIO.read(file);
         image = imageProcess.ensureOpaque(image);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
