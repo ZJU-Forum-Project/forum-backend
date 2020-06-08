@@ -14,6 +14,7 @@ import zju.group1.forum.interceptor.AuthToken;
 import zju.group1.forum.mapper.PictureMapper;
 import zju.group1.forum.mapper.UserMapper;
 import zju.group1.forum.provider.RedisProvider;
+import zju.group1.forum.tool.ImageProcess;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -45,6 +46,9 @@ public class PictureContoller {
 
     @Autowired
     private RedisProvider redisProvider;
+
+    @Autowired
+    private ImageProcess imageProcess;
 
     @Value("${spring.picDir}")
     private String picDir;
@@ -143,11 +147,13 @@ public class PictureContoller {
         return message;
     }
 
+
     @ApiOperation("获取图片")
     @GetMapping(value = "/getBase64PictureByUrl")
     public String getBase64PictureByUrl(@RequestParam(value = "url") String URL) throws Exception {
-        File file = new File("/home/" + URL);
+        File file = new File("/Users/wzy/Desktop/" + URL);
         BufferedImage image = ImageIO.read(file);
+        image = imageProcess.ensureOpaque(image);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         String format = URL.substring(URL.indexOf('.') + 1);
         ImageIO.write(image, format, stream);
