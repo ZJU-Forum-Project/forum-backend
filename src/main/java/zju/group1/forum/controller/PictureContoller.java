@@ -12,6 +12,8 @@ import zju.group1.forum.dto.Message;
 import zju.group1.forum.dto.Picture;
 import zju.group1.forum.interceptor.AuthToken;
 import zju.group1.forum.mapper.PictureMapper;
+import zju.group1.forum.mapper.PostingsMapper;
+import zju.group1.forum.mapper.ReplyMapper;
 import zju.group1.forum.mapper.UserMapper;
 import zju.group1.forum.provider.RedisProvider;
 import zju.group1.forum.tool.ImageProcess;
@@ -43,6 +45,9 @@ public class PictureContoller {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private ReplyMapper replyMapper;
 
     @Autowired
     private RedisProvider redisProvider;
@@ -86,7 +91,7 @@ public class PictureContoller {
     @PostMapping(value = "/seePicture")
     @AuthToken
     public List<Picture> seePicture(@RequestParam("postId") int postId) {
-        int maxFloorNumberByPostID = pictureMapper.getMaxFloorNumberByPostID(postId);
+        int maxFloorNumberByPostID = replyMapper.getMaxFloorNumberByPostID(postId);
         List<Picture> all_pictures = new ArrayList<>();
         List<Picture> pictures = pictureMapper.getPictureByPostID(postId);
         for (int i = 0; i <= maxFloorNumberByPostID; i++) {
