@@ -2,7 +2,6 @@ package zju.group1.forum.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -12,7 +11,6 @@ import zju.group1.forum.dto.Message;
 import zju.group1.forum.dto.Picture;
 import zju.group1.forum.interceptor.AuthToken;
 import zju.group1.forum.mapper.PictureMapper;
-import zju.group1.forum.mapper.PostingsMapper;
 import zju.group1.forum.mapper.ReplyMapper;
 import zju.group1.forum.mapper.UserMapper;
 import zju.group1.forum.provider.RedisProvider;
@@ -20,12 +18,15 @@ import zju.group1.forum.tool.ImageProcess;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
-import java.sql.Array;
-import java.util.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import java.util.UUID;
 
 /*
  * 帖子的数据库名称为post_picture

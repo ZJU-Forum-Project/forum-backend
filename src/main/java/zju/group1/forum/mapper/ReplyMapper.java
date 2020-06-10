@@ -34,7 +34,7 @@ public interface ReplyMapper {
     @Select("select * from post_reply where replyid in (select id from post_reply where author = #{name})")
     List<Reply> CheckReply(String name);
 
-    @Update("update post_reply set replyState=true where id = #{id}")
+    @Update("update post_reply set replyState=false where id = #{id}")
     void seenReply(int id);
 
     @Select("select count(replyState='false') from post_reply where replyid in (select id from post_reply where author = #{name})")
