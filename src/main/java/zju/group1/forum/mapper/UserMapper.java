@@ -6,8 +6,13 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import zju.group1.forum.dto.User;
 
+import java.util.List;
+
 @Mapper
 public interface UserMapper {
+
+    @Select("select * from user where name = #{name}")
+    List<User> selectUserByUsername(String name);
 
     @Insert("insert into user (email,name,password,avatarUrl) values (#{email},#{name},#{password},#{avatarUrl})")
     void createUser(User user);
