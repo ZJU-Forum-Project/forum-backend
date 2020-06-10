@@ -36,7 +36,10 @@ public interface ReplyMapper {
 
     @Update("update post_reply set replyState=true where id = #{id}")
     void seenReply(int id);
-    
+
     @Select("select count(replyState='false') from post_reply where replyid in (select id from post_reply where author = #{name})")
     int getUnreadReplyNumber(String name);
+
+    @Select("select IFNULL(max(floorNumber),0) from post_reply where postId = #{postId}")
+    int getMaxFloorNumberByPostID(int postId);
 }
