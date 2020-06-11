@@ -4,6 +4,11 @@ import lombok.Data;
 
 @Data
 public class SearchUser {
-    String username;
+    String name;
     String avatarUrl;
+
+    public SearchUser(String name,String avatarUrl){
+        this.name=name;
+        this.avatarUrl=avatarUrl;
+    }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 @Data
 public class SearchMessage {
+    Boolean state;
     List<SearchUser> userList;
     List<Posting> postingList;
 }

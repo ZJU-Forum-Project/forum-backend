@@ -55,4 +55,7 @@ public interface PostingsMapper {
 
     @Select("select * from posting order by id desc limit 10")
     List<Posting> listLastest();
+
+    @Select("select * from posting where title like CONCAT('%',#{0},'%')")
+    List<Posting> selectByTitle(String content);
 }
