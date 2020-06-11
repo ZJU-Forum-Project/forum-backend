@@ -103,7 +103,8 @@ public class AuthorizeController {
         } else {
             message.setState(true);
             String name = userMapper.searchName(email);
-            message.setMessage("登陆成功！;" + name);
+            String avatarUrl = userMapper.getAvatarUrlByName(name);
+            message.setMessage(name+";"+avatarUrl);
             String authorizeToken = encryptService.getMD5Code(email);
             redisProvider.setAuthorizeToken(authorizeToken, email);
             message.setAuthorizeToken(authorizeToken);
