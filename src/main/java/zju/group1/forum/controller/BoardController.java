@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import zju.group1.forum.dto.BoardMessage;
+import zju.group1.forum.dto.BoardPosting;
 import zju.group1.forum.dto.Message;
 import zju.group1.forum.dto.Posting;
 import zju.group1.forum.interceptor.AuthToken;
@@ -17,6 +18,7 @@ import zju.group1.forum.mapper.UserMapper;
 import zju.group1.forum.provider.RedisProvider;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Api(tags = "板块信息")
@@ -42,13 +44,15 @@ public class BoardController {
         BoardMessage message = new BoardMessage();
 
         List<Posting> postingList = postingsMapper.listEmotion();
+        List<BoardPosting> boardPostingList = transform(postingList);
         message.setState(true);
         String intro = boardMapper.getIntro(1);
         message.setIntro(intro);
-        message.setPostings(postingList);
+        message.setPostings(boardPostingList);
         message.setMessage("获取情感板块帖子成功");
         return message;
     }
+
 
     @ApiOperation("校园生活板块")
     @PostMapping(value = "/information")
@@ -57,10 +61,11 @@ public class BoardController {
         BoardMessage message = new BoardMessage();
 
         List<Posting> postingList = postingsMapper.listInformation();
+        List<BoardPosting> boardPostingList = transform(postingList);
         message.setState(true);
         String intro = boardMapper.getIntro(2);
         message.setIntro(intro);
-        message.setPostings(postingList);
+        message.setPostings(boardPostingList);
         message.setMessage("获取校园信息板块帖子成功");
         return message;
     }
@@ -72,10 +77,11 @@ public class BoardController {
         BoardMessage message = new BoardMessage();
 
         List<Posting> postingList = postingsMapper.listIntern();
+        List<BoardPosting> boardPostingList = transform(postingList);
         message.setState(true);
         String intro = boardMapper.getIntro(3);
         message.setIntro(intro);
-        message.setPostings(postingList);
+        message.setPostings(boardPostingList);
         message.setMessage("获取实习信息板块帖子成功");
         return message;
     }
@@ -87,10 +93,11 @@ public class BoardController {
         BoardMessage message = new BoardMessage();
 
         List<Posting> postingList = postingsMapper.listStudy();
+        List<BoardPosting> boardPostingList = transform(postingList);
         message.setState(true);
         String intro = boardMapper.getIntro(4);
         message.setIntro(intro);
-        message.setPostings(postingList);
+        message.setPostings(boardPostingList);
         message.setMessage("获取学习板块帖子成功");
         return message;
     }
@@ -118,5 +125,28 @@ public class BoardController {
             message.setAuthorizeToken(token);
             return message;
         }
+    }
+
+    private List<BoardPosting> transform(List<Posting> postingList) {
+        int n = postingList.size();
+        List<BoardPosting> boardPostingList = new ArrayList<>();
+        BoardPosting boardPosting;
+        for(int i=0;i<n;i++){
+            Posting posting = postingList.get(i);
+            String avatarUrl = userMapper.getAvatarUrlByName(posting.getAuthor());
+            boardPosting = new BoardPosting(
+                    posting.getId(),
+                    posting.getAuthor(),
+                    posting.getTitle(),
+                    posting.getType(),
+                    posting.getContent(),
+                    posting.getTime(),
+                    posting.getReplyN(),
+                    posting.getVisitN()
+            );
+            boardPosting.setAvatarUrl(avatarUrl);
+            boardPostingList.add(boardPosting);
+        }
+        return boardPostingList;
     }
 }
