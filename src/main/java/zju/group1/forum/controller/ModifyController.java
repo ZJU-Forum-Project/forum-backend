@@ -25,7 +25,6 @@ public class ModifyController {
 
     @ApiOperation("修改密码")
     @PostMapping(value = "/modify")
-    @AuthToken
     public Message modify(@RequestParam("password") String password,
                           @RequestParam("email") String email,
                           @RequestParam("token") String token,
