@@ -8,16 +8,16 @@ import java.util.List;
 @Mapper
 public interface PostingsMapper {
 
-    @Select("select * from posting where type = 1")
+    @Select("select * from posting where type = 1 order by time desc")
     List<Posting> listEmotion();
 
-    @Select("select * from posting where type = 2")
+    @Select("select * from posting where type = 2 order by time desc")
     List<Posting> listInformation();
 
-    @Select("select * from posting where type = 3")
+    @Select("select * from posting where type = 3 order by time desc")
     List<Posting> listIntern();
 
-    @Select("select * from posting where type = 4")
+    @Select("select * from posting where type = 4 order by time desc")
     List<Posting> listStudy();
 
     @Select("select * from posting where author = #{name}")
@@ -53,7 +53,7 @@ public interface PostingsMapper {
     @Select("select author from posting where id = #{postingID}")
     String getAuthorById(int postingID);
 
-    @Select("select * from posting order by id desc limit 10")
+    @Select("select * from posting order by time desc limit 10")
     List<Posting> listLastest();
 
     @Select("select * from posting where title like CONCAT('%',#{0},'%')")
