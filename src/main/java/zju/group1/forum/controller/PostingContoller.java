@@ -67,6 +67,9 @@ public class PostingContoller {
     public BoardMessage checkLatestPostings() {
         BoardMessage boardMessage = new BoardMessage();
         List<Posting> postingList = postingsMapper.listLastest();
+        for(Posting posting: postingList){
+            posting.setAvatarUrl(userMapper.getAvatarUrlByName(posting.getAuthor()));
+        }
         boardMessage.setState(true);
         boardMessage.setPostings(postingList);
         boardMessage.setMessage("获取最新发帖成功");

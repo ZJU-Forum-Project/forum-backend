@@ -47,6 +47,9 @@ public class PersonalPostingController {
         }
         String name = userMapper.searchName(email);
         List<Posting> postingList = postingsMapper.listPersonalPostings(name);
+        for(Posting posting: postingList){
+            posting.setAvatarUrl(userMapper.getAvatarUrlByName(posting.getAuthor()));
+        }
         message.setPostings(postingList);
         message.setMessage("获取个人所有发帖成功");
         return message;

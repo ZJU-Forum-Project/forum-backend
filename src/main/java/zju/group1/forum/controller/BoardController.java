@@ -44,11 +44,14 @@ public class BoardController {
         BoardMessage message = new BoardMessage();
 
         List<Posting> postingList = postingsMapper.listEmotion();
-        List<BoardPosting> boardPostingList = transform(postingList);
-        message.setState(true);
+        for(Posting posting: postingList){
+            posting.setAvatarUrl(userMapper.getAvatarUrlByName(posting.getAuthor()));
+        }
         String intro = boardMapper.getIntro(1);
+
+        message.setPostings(postingList);
+        message.setState(true);
         message.setIntro(intro);
-        message.setPostings(boardPostingList);
         message.setMessage("获取情感板块帖子成功");
         return message;
     }
@@ -61,11 +64,14 @@ public class BoardController {
         BoardMessage message = new BoardMessage();
 
         List<Posting> postingList = postingsMapper.listInformation();
-        List<BoardPosting> boardPostingList = transform(postingList);
-        message.setState(true);
+        for(Posting posting: postingList){
+            posting.setAvatarUrl(userMapper.getAvatarUrlByName(posting.getAuthor()));
+        }
         String intro = boardMapper.getIntro(2);
+
+        message.setState(true);
         message.setIntro(intro);
-        message.setPostings(boardPostingList);
+        message.setPostings(postingList);
         message.setMessage("获取校园信息板块帖子成功");
         return message;
     }
@@ -77,11 +83,14 @@ public class BoardController {
         BoardMessage message = new BoardMessage();
 
         List<Posting> postingList = postingsMapper.listIntern();
-        List<BoardPosting> boardPostingList = transform(postingList);
-        message.setState(true);
+        for(Posting posting: postingList){
+            posting.setAvatarUrl(userMapper.getAvatarUrlByName(posting.getAuthor()));
+        }
         String intro = boardMapper.getIntro(3);
+
+        message.setState(true);
         message.setIntro(intro);
-        message.setPostings(boardPostingList);
+        message.setPostings(postingList);
         message.setMessage("获取实习信息板块帖子成功");
         return message;
     }
@@ -93,11 +102,14 @@ public class BoardController {
         BoardMessage message = new BoardMessage();
 
         List<Posting> postingList = postingsMapper.listStudy();
-        List<BoardPosting> boardPostingList = transform(postingList);
-        message.setState(true);
+        for(Posting posting: postingList){
+            posting.setAvatarUrl(userMapper.getAvatarUrlByName(posting.getAuthor()));
+        }
         String intro = boardMapper.getIntro(4);
+
+        message.setState(true);
         message.setIntro(intro);
-        message.setPostings(boardPostingList);
+        message.setPostings(postingList);
         message.setMessage("获取学习板块帖子成功");
         return message;
     }
@@ -125,28 +137,5 @@ public class BoardController {
             message.setAuthorizeToken(token);
             return message;
         }
-    }
-
-    private List<BoardPosting> transform(List<Posting> postingList) {
-        int n = postingList.size();
-        List<BoardPosting> boardPostingList = new ArrayList<>();
-        BoardPosting boardPosting;
-        for(int i=0;i<n;i++){
-            Posting posting = postingList.get(i);
-            String avatarUrl = userMapper.getAvatarUrlByName(posting.getAuthor());
-            boardPosting = new BoardPosting(
-                    posting.getId(),
-                    posting.getAuthor(),
-                    posting.getTitle(),
-                    posting.getType(),
-                    posting.getContent(),
-                    posting.getTime(),
-                    posting.getReplyN(),
-                    posting.getVisitN()
-            );
-            boardPosting.setAvatarUrl(avatarUrl);
-            boardPostingList.add(boardPosting);
-        }
-        return boardPostingList;
     }
 }

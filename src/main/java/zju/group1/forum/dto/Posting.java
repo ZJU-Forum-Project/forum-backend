@@ -12,4 +12,5 @@ public class Posting {
     private String time;
     private int replyN;
     private int visitN;
+    private String avatarUrl;
 }

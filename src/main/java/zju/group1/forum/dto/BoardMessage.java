@@ -9,5 +9,5 @@ public class BoardMessage {
     private String message;
     private String authorizeToken;
     private String intro;
-    private List<BoardPosting> postings;
+    private List<Posting> postings;
 }
