@@ -1,11 +1,6 @@
 package zju.group1.forum.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.sql.Date;
-import java.util.List;
 
 @Data
 public class ReplyMessage {
