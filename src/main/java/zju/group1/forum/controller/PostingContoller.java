@@ -13,7 +13,6 @@ import zju.group1.forum.mapper.UserInfoMapper;
 import zju.group1.forum.mapper.UserMapper;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
