@@ -31,10 +31,16 @@ public interface ReplyMapper {
     @Delete("delete from post_reply where id = #{floorId}")
     void deleteReply(int floorId);
 
-    @Select("select * from post_reply where replyid in (select id from post_reply where author = #{name}) and replyState=true")
+    @Select("select * from post_reply " +
+            "where (replyid in (select id from post_reply where author = #{name}) " +
+            "or (postId in (select id from posting where author = #{name}) and replyId=0)) " +
+            "and replyState=true")
     List<Reply> CheckReply(String name);
 
-    @Select("select count(*) from post_reply where replyid in (select id from post_reply where author = #{name}) and replyState=true")
+    @Select("select count(*) from post_reply " +
+            "where (replyid in (select id from post_reply where author = #{name}) " +
+            "or (postId in (select id from posting where author = #{name}) and replyId=0)) " +
+            "and replyState=true")
     int getUnreadReplyNumber(String name);
 
     @Update("update post_reply set replyState=false where id = #{id}")
