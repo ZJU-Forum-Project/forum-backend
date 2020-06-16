@@ -4,16 +4,12 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-import zju.group1.forum.dto.SearchUser;
 import zju.group1.forum.dto.User;
 
 import java.util.List;
 
 @Mapper
 public interface UserMapper {
-
-    @Select("select name, avatarUrl from user where name like CONCAT('%',#{0},'%')")
-    List<SearchUser> selectUserByUsername(String content);
 
     @Insert("insert into user (email,name,password,avatarUrl) values (#{email},#{name},#{password},#{avatarUrl})")
     void createUser(User user);
