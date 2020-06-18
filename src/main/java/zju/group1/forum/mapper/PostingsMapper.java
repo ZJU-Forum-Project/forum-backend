@@ -20,7 +20,7 @@ public interface PostingsMapper {
     @Select("select * from posting where type = 4 order by time desc")
     List<Posting> listStudy();
 
-    @Select("select * from posting where author = #{name}")
+    @Select("select * from posting where author = #{name} order by time desc")
     List<Posting> listPersonalPostings(String name);
 
     @Select("select * from posting where id = #{postingID}")
